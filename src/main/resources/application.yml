@@ -2,6 +2,16 @@ spring:
   datasource:
     password: maxu030510@#
     username: root
-    url: jdbc:mysql:172.21.0.11//:3306/tmp?useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://cdb-eo0fbe96.bj.tencentcdb.com:10223/tmp?useUnicode=true&characterEncoding=utf8
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+springfox:
+  documentation:
+    swagger:
+      v1:
+        path: /api-doc
+
+mybatis:
+  mapper-locations: classpath:mybatis/mapper/*Mapper.xml
+  config-location: classpath:mybatis/mybatis-config.xml
+  type-aliases-package: com.xupt.tmp.domain

@@ -1,15 +1,18 @@
-package com.xupt.tmp.domain;
+package com.xupt.tmp.model;
 
 import lombok.Data;
 import org.joda.time.DateTime;
 
 @Data
 public class Work {
+
     private int wId;
     private int cId;
-    private int status;
+    private String title;
     private String body;
-    private DateTime start;
+    private int status;
+
+    private DateTime create;
     private DateTime update;
     private DateTime end;
 }
