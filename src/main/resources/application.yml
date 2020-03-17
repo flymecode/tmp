@@ -15,3 +15,10 @@ mybatis:
   mapper-locations: classpath:mybatis/mapper/*Mapper.xml
   config-location: classpath:mybatis/mybatis-config.xml
   type-aliases-package: com.xupt.tmp.domain
+
+pagehelper:
+  supportMethodsArguments: true
+  reasonable: true
+  returnPageInfo: check
+  helperDialect: mysql
+  params: count=countSql

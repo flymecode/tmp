@@ -1,12 +1,16 @@
 package com.xupt.tmp.service;
 
 import com.xupt.tmp.dto.ResultMap;
+import com.xupt.tmp.dto.questionDto.QueryQuestionParam;
+import com.xupt.tmp.model.Question;
+
+import java.util.List;
 
 public interface QuestionService {
     /**
      * 根据试题类型查询题目
      */
-    ResultMap getQuestionsByType(int type);
+    List<Question> getQuestionsByConditions(QueryQuestionParam queryQuestionParam);
 
     ResultMap updateQuestionById(long id);
 

@@ -1,10 +1,15 @@
 package com.xupt.tmp.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.xupt.tmp.config.PageUtils;
 import com.xupt.tmp.dto.ResultMap;
+import com.xupt.tmp.dto.questionDto.QueryQuestionParam;
+import com.xupt.tmp.exception.ServerException;
 import com.xupt.tmp.mapper.QuestionMapper;
 import com.xupt.tmp.model.Question;
 import com.xupt.tmp.service.QuestionService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +23,23 @@ public class QuestionServiceImpl implements QuestionService {
     private QuestionMapper questionMapper;
 
     @Override
-    public ResultMap getQuestionsByType(int type) {
-        ResultMap result = new ResultMap();
-        List<Question>  questions = questionMapper.getQuestionByType(type);
-        result.success().payloads(questions);
-        return result;
+    public List<Question> getQuestionsByConditions(QueryQuestionParam queryQuestionParam) {
+        int pageNum = queryQuestionParam.getPage();
+        int pageSize = queryQuestionParam.getLimit();
+        String sort = queryQuestionParam.getSort();
+        if (!PageUtils.checkPageInfo(pageNum, pageSize)) {
+            throw new ServerException("Invalid page info");
+        }
+        PageHelper.startPage(pageNum, pageSize);
+        List<Question> questions = questionMapper.getQuestionsByConditions(queryQuestionParam);
+        if (StringUtils.isNotEmpty(sort)) {
+            if (sort.equals("+id")) {
+                questions.sort((o1, o2) -> (int) (o1.getId() - o2.getId()));
+            } else {
+                questions.sort((o1, o2) -> (int) (o2.getId() - o1.getId()));
+            }
+        }
+        return questions;
     }
 
     @Override

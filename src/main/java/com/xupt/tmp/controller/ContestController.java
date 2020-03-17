@@ -33,7 +33,7 @@ public class ContestController {
         return ResponseEntity.ok(new ResultMap().success());
     }
 
-    @PostMapping
+    @PostMapping("/update")
     public ResponseEntity updateContest(@RequestBody Contest contest) {
         boolean result = contestService.updateContest(contest);
         return ResponseEntity.ok(new ResultMap().success());
