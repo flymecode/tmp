@@ -3,16 +3,19 @@ package com.xupt.tmp.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.xupt.tmp.config.PageUtils;
 import com.xupt.tmp.dto.ResultMap;
-import com.xupt.tmp.dto.questionDto.QueryQuestionParam;
+import com.xupt.tmp.dto.questionDto.QuestionQueryParam;
+import com.xupt.tmp.dto.questionDto.QuestionCreate;
 import com.xupt.tmp.exception.ServerException;
 import com.xupt.tmp.mapper.QuestionMapper;
 import com.xupt.tmp.model.Question;
 import com.xupt.tmp.service.QuestionService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -23,15 +26,15 @@ public class QuestionServiceImpl implements QuestionService {
     private QuestionMapper questionMapper;
 
     @Override
-    public List<Question> getQuestionsByConditions(QueryQuestionParam queryQuestionParam) {
-        int pageNum = queryQuestionParam.getPage();
-        int pageSize = queryQuestionParam.getLimit();
-        String sort = queryQuestionParam.getSort();
+    public List<Question> getQuestionsByConditions(QuestionQueryParam questionQueryParam) {
+        int pageNum = questionQueryParam.getPage();
+        int pageSize = questionQueryParam.getLimit();
+        String sort = questionQueryParam.getSort();
         if (!PageUtils.checkPageInfo(pageNum, pageSize)) {
             throw new ServerException("Invalid page info");
         }
         PageHelper.startPage(pageNum, pageSize);
-        List<Question> questions = questionMapper.getQuestionsByConditions(queryQuestionParam);
+        List<Question> questions = questionMapper.getQuestionsByConditions(questionQueryParam);
         if (StringUtils.isNotEmpty(sort)) {
             if (sort.equals("+id")) {
                 questions.sort((o1, o2) -> (int) (o1.getId() - o2.getId()));
@@ -49,6 +52,24 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public ResultMap deleteQuestionById(long id) {
-        return null;
+        questionMapper.deleteQuestionById(id);
+        return new ResultMap().success();
+    }
+
+    @Override
+    public List<Question> getQuestionsById(List<Long> list) {
+        return questionMapper.selectQuestionByIds(list);
+    }
+
+    @Override
+    public void addQuestion(QuestionCreate questionCreate) {
+        Question question = new Question();
+        BeanUtils.copyProperties(questionCreate, question);
+        question.setContent(questionCreate.getTitle());
+        question.setTag("");
+        question.setParse("");
+        question.setCreateTime(new Date());
+        question.setUpdateTime(new Date());
+        questionMapper.insert(question);
     }
 }

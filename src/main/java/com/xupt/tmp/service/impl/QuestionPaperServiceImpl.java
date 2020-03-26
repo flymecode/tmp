@@ -1,6 +1,7 @@
 package com.xupt.tmp.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageHelper;
 import com.xupt.tmp.dto.paperDto.QuestionPaperResult;
 import com.xupt.tmp.mapper.QuestionMapper;
 import com.xupt.tmp.mapper.QuestionPaperMapper;
@@ -26,7 +27,7 @@ public class QuestionPaperServiceImpl implements QuestionPaperService {
     private QuestionMapper questionMapper;
 
     @Override
-    public List<QuestionPaperResult> getPaper(String username) {
+    public List<QuestionPaperResult> getPaperAndQuestion(String username) {
 
         List<QuestionPaperResult> results = new ArrayList<>();
         List<QuestionPaper> questionPapers = questionPaperMapper.selectPaperByCreateId(username);
@@ -44,6 +45,21 @@ public class QuestionPaperServiceImpl implements QuestionPaperService {
     public QuestionPaperResult addPaper(QuestionPaper questionPaper) {
         questionPaperMapper.insert(questionPaper);
         return new QuestionPaperResult();
+    }
+
+    @Override
+    public List<QuestionPaper> getPaperInfo(String username, int page, int limit) {
+        PageHelper.startPage(page, limit);
+        List<QuestionPaper> questionPapers = questionPaperMapper.selectPaperByCreateId(username);
+        if (Collections.isEmpty(questionPapers)) {
+            return new ArrayList<>();
+        }
+        return questionPapers;
+    }
+
+    @Override
+    public void deletePaper() {
+        questionPaperMapper.deletePaper();
     }
 
 

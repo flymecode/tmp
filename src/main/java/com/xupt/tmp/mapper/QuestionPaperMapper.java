@@ -1,6 +1,7 @@
 package com.xupt.tmp.mapper;
 
 import com.xupt.tmp.model.QuestionPaper;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -16,4 +17,7 @@ public interface QuestionPaperMapper {
     QuestionPaper selectPaperById(long id);
 
     QuestionPaper updatePaperByCreateId();
+
+    @Delete({"delete from question_paper"})
+    void deletePaper();
 }

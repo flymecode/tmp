@@ -1,7 +1,8 @@
 package com.xupt.tmp.model;
 
 import lombok.Data;
-import org.joda.time.DateTime;
+
+import java.util.Date;
 
 @Data
 public class Work {
@@ -12,7 +13,7 @@ public class Work {
     private String body;
     private int status;
 
-    private DateTime create;
-    private DateTime update;
-    private DateTime end;
+    private Date create;
+    private Date update;
+    private Date end;
 }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xupt.tmp.mapper.SelectCourseTableMapper">
+    <insert id="insert" parameterType="com.xupt.tmp.model.SelectCourseTable">
+        <!--        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">-->
+        <!--            SELECT LAST_INSERT_ID() AS id-->
+        <!--        </selectKey>-->
+        INSERT INTO `select_course_table`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            `id`,
+            `username`,
+            `course_ids`,
+        </trim>
+        VALUES
+        <trim prefix=" (" suffix=")" suffixOverrides=",">
+            #{id, jdbcType=BIGINT},
+            #{username, jdbcType=VARCHAR},
+            #{courseIds, jdbcType=INTEGER},
+        </trim>
+    </insert>
+
+</mapper>

@@ -1,14 +1,23 @@
 package com.xupt.tmp.model;
 
 import lombok.Data;
-import org.joda.time.DateTime;
+
+import java.util.Date;
 
 @Data
 public class QuestionPaper {
     /**
-     * 试卷ID
+     * 试卷Id
      */
     private long id;
+    /**
+     * 课程Id
+     */
+    private long courseId;
+    /**
+     * 课程名称
+     */
+    private String courseName;
     /**
      * 创建人Id
      */
@@ -22,9 +31,12 @@ public class QuestionPaper {
      */
     private String questions;
 
+
+
+
     private int status;
 
-    private DateTime createTime;
-    private DateTime updateTime;
+    private Date createTime;
+    private Date updateTime;
 
 }

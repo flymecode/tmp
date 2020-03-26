@@ -2,10 +2,11 @@ package com.xupt.tmp.controller;
 
 import com.xupt.tmp.annotion.CurrentUser;
 import com.xupt.tmp.common.Consts;
-import com.xupt.tmp.dto.userDto.UserLoginResult;
-import com.xupt.tmp.model.User;
 import com.xupt.tmp.dto.ResultMap;
+import com.xupt.tmp.dto.userDto.UserLoginResult;
 import com.xupt.tmp.dto.userDto.UserRegist;
+import com.xupt.tmp.model.User;
+import com.xupt.tmp.service.SelectCourseTableService;
 import com.xupt.tmp.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +18,16 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = Consts.BASE_API_PATH + "/user", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserController extends BaseController {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private SelectCourseTableService selectCourseTableService;
 
     /**
      * 用户注册
@@ -43,6 +48,11 @@ public class UserController extends BaseController {
     public ResponseEntity getUserInfo(@ApiIgnore @CurrentUser User user) {
 
         UserLoginResult userLoginResult = new UserLoginResult(user);
+        List<String> roles = userLoginResult.getRoles();
+        if (roles.contains("student")) {
+            List<Long> courseTable = selectCourseTableService.getCourseTable(user.getUsername());
+            userLoginResult.setCourseTable(courseTable);
+        }
         return ResponseEntity.ok(new ResultMap().success().payload(userLoginResult));
     }
 

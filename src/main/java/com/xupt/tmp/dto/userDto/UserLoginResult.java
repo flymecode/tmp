@@ -10,6 +10,7 @@ import java.util.List;
 public class UserLoginResult extends UserBaseInfo {
     private String name;
     private List<String> roles;
+    private List<Long> courseTable;
     public UserLoginResult(User user) {
         this.name = user.getName();
         this.username = user.getUsername();

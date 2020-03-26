@@ -1,7 +1,8 @@
 package com.xupt.tmp.model;
 
 import lombok.Data;
-import org.joda.time.DateTime;
+
+import java.util.Date;
 
 @Data
 public class Question {
@@ -35,7 +36,7 @@ public class Question {
      */
     private String answer;
     /**
-     * 没写
+     * 解析
      */
     private String parse;
     /**
@@ -53,7 +54,7 @@ public class Question {
      */
     private String tag;
 
-    private DateTime createTime;
-    private DateTime updateTime;
+    private Date createTime;
+    private Date updateTime;
 
 }

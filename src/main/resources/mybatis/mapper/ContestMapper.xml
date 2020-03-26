@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xupt.tmp.mapper.ContestMapper">
+    <insert id="insert" parameterType="com.xupt.tmp.model.Contest">
+        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
+        INSERT INTO `contest`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            `title`,
+            `course_id`,
+            `operation_id`,
+            `question_paper_id`,
+            `name`,
+            `questions`,
+            `type`,
+            `state`,
+            `start_time`,
+            `end_time`,
+            `create_time`,
+            `update_time`
+        </trim>
+        VALUES
+        <trim prefix=" (" suffix=")" suffixOverrides=",">
+            #{title, jdbcType=VARCHAR},
+            #{courseId, jdbcType=BIGINT},
+            #{operationId, jdbcType=VARCHAR},
+            #{questionPaperId, jdbcType=BIGINT},
+            #{name, jdbcType=VARCHAR},
+            #{questions, jdbcType=VARCHAR},
+            #{type, jdbcType=INTEGER},
+            #{state, jdbcType=INTEGER},
+            #{startTime, jdbcType=DATE},
+            #{endTime, jdbcType=DATE},
+            #{createTime, jdbcType=DATE},
+            #{updateTime, jdbcType=DATE}
+        </trim>
+    </insert>
+
+    <select id="selectContestsByCourseId" resultType="com.xupt.tmp.model.Contest">
+        SELECT * FROM contest
+        <where>
+            <if test="list != null and list.size > 0">
+                course_id in
+                <foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+</mapper>

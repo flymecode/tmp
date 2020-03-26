@@ -1,7 +1,8 @@
 package com.xupt.tmp.model;
 
 import lombok.Data;
-import org.joda.time.DateTime;
+
+import java.util.Date;
 
 @Data
 public class Grade {
@@ -36,11 +37,11 @@ public class Grade {
     /**
      * 提交时间
      */
-    private DateTime createTime;
+    private Date createTime;
     /**
      * 阅卷时间
      */
-    private DateTime finishTime;
+    private Date finishTime;
     /**
      * 是否批阅
      * 0 - 未批阅

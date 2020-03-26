@@ -10,6 +10,8 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `id`,
             `create_id`,
+            `course_id`,
+            `course_name`,
             `name`,
             `questions`,
             `status`
@@ -18,6 +20,8 @@
         <trim prefix=" (" suffix=")" suffixOverrides=",">
             #{id, jdbcType=BIGINT},
             #{createId, jdbcType=VARCHAR},
+            #{courseId, jdbcType=BIGINT},
+            #{courseName, jdbcType=VARCHAR},
             #{name, jdbcType=VARCHAR},
             #{questions, jdbcType=VARCHAR},
             #{status, jdbcType=INTEGER}

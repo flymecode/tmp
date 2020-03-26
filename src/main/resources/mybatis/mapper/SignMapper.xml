@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xupt.tmp.mapper.SignMapper">
+    <insert id="insertSignRecord" parameterType="com.xupt.tmp.model.SignRecord">
+        INSERT INTO `sign_record`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            `sign_id`,
+            `status`,
+            `sign_time`,
+            `username`,
+            `name`
+        </trim>
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            <trim prefix=" (" suffix=")" suffixOverrides=",">
+                #{item.signId, jdbcType=BIGINT},
+                #{item.status, jdbcType=INTEGER},
+                #{item.signTime, jdbcType=DATE},
+                #{item.username, jdbcType=VARCHAR},
+                #{item.name, jdbcType=VARCHAR},
+            </trim>
+        </foreach>
+    </insert>
+
+    <insert id="insertSignTask" parameterType="com.xupt.tmp.model.SignTask">
+        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
+        INSERT INTO `sign_task`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            `course_id`,
+            `name`,
+            `create_time`,
+            `start_time`,
+            `end_time`,
+        </trim>
+        VALUES
+        <trim prefix=" (" suffix=")" suffixOverrides=",">
+            #{courseId, jdbcType=BIGINT},
+            #{name, jdbcType=VARCHAR},
+            #{createTime, jdbcType=DATE},
+            #{startTime, jdbcType=DATE},
+            #{endTime, jdbcType=DATE},
+        </trim>
+    </insert>
+
+</mapper>

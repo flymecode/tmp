@@ -1,7 +1,8 @@
 package com.xupt.tmp.model;
 
 import lombok.Data;
-import org.joda.time.DateTime;
+
+import java.util.Date;
 
 /**
  * 通知消息
@@ -31,7 +32,7 @@ public class Notice {
      */
     private int weight;
 
-    private DateTime updateTime;
-    private DateTime createTime;
-    private DateTime deleteTime;
+    private Date updateTime;
+    private Date createTime;
+    private Date deleteTime;
 }

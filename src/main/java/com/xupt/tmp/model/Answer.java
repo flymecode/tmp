@@ -3,6 +3,8 @@ package com.xupt.tmp.model;
 import lombok.Data;
 import org.joda.time.DateTime;
 
+import java.util.Date;
+
 @Data
 public class Answer {
 
@@ -11,6 +13,6 @@ public class Answer {
     private long score;
 
     private DateTime end;
-    private DateTime create;
-    private DateTime update;
+    private Date create;
+    private Date update;
 }

@@ -1,7 +1,8 @@
 package com.xupt.tmp.model;
 
 import lombok.Data;
-import org.joda.time.DateTime;
+
+import java.util.Date;
 
 @Data
 /**
@@ -9,46 +10,58 @@ import org.joda.time.DateTime;
  */
 public class Contest {
 
+    /**
+     * 测试Id
+     */
     private long id;
     /**
      * 测试名称
      */
     private String title;
     /**
-     * 总成绩
-     */
-    private int totalScore;
-    /**
      * 课程ID
      */
     private long courseId;
+    /**
+     * 操作人ID
+     */
+    private String operationId;
     /**
      * 试卷ID
      */
     private long questionPaperId;
     /**
-     * 操作人ID
+     * 试卷名称
      */
-    private long operationId;
-
+    private String name;
     /**
-     * 创建时间
+     * 试题
      */
-    private DateTime createTime;
+    private String questions;
     /**
-     * 更新时间
+     * 测试类型
      */
-    private DateTime updateTime;
+    private int type;
     /**
      * 测试开始时间
      */
-    private DateTime startTime;
+    private Date startTime;
     /**
      * 测试结束时间
      */
-    private DateTime endTime;
+    private Date endTime;
     /**
      *  进行状态:0表示未开始,1表示进行中,2表示考试已经结束,3表示该考试已经完成批卷
      */
     private int state;
+
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+    /**
+     * 更新时间
+     */
+    private Date updateTime;
+
 }

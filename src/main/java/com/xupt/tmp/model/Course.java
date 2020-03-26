@@ -1,7 +1,8 @@
 package com.xupt.tmp.model;
 
 import lombok.Data;
-import org.joda.time.DateTime;
+
+import java.util.Date;
 
 @Data
 public class Course {
@@ -9,6 +10,15 @@ public class Course {
      * 课程id
      */
     private long id;
+    /**
+     * 课程创建人Id
+     * User(username)
+     */
+    private String createId;
+    /**
+     * 创建人姓名
+     */
+    private String createName;
     /**
      * 课时
      */
@@ -25,15 +35,12 @@ public class Course {
      * 0 - 正常
      * 1 - 下架
      */
-    private int state;
-    /**
-     * 题目数量
-     */
-    private int questionNum;
+    private int status;
     /**
      * 课程描述
      */
     private String description;
-    private DateTime createTime;
-    private DateTime updateTime;
+
+    private Date createTime;
+    private Date updateTime;
 }
