@@ -3,6 +3,7 @@ package com.xupt.tmp.service;
 import com.xupt.tmp.dto.paperDto.QuestionPaperResult;
 import com.xupt.tmp.model.QuestionPaper;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface QuestionPaperService {
@@ -33,4 +34,11 @@ public interface QuestionPaperService {
 
     void deletePaper();
 
+    /**
+     * 获取试卷名称
+     * @param name
+     * @param request
+     * @return
+     */
+    List<QuestionPaper> getPaperName(String name, HttpServletRequest request);
 }

@@ -1,15 +1,19 @@
 package com.xupt.tmp.controller;
 
+import com.xupt.tmp.annotion.CurrentUser;
 import com.xupt.tmp.common.Consts;
 import com.xupt.tmp.dto.ResultMap;
 import com.xupt.tmp.dto.signDto.SignCreate;
+import com.xupt.tmp.dto.signDto.SignTaskResult;
 import com.xupt.tmp.model.SignRecord;
+import com.xupt.tmp.model.User;
 import com.xupt.tmp.service.SignService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -26,15 +30,21 @@ public class SignController {
         return ResponseEntity.ok(new ResultMap().success());
     }
 
-    @PostMapping("/create")
-    public ResponseEntity createSign(SignCreate signCreate) {
-        signService.createSign(signCreate);
+    @PostMapping
+    public ResponseEntity createSign(@RequestBody SignCreate signCreate, HttpServletRequest request) {
+        signService.createSign(signCreate, request);
         return ResponseEntity.ok(new ResultMap().success());
     }
 
-    @GetMapping
-    public ResponseEntity getSigns(String username) {
-        List<SignRecord> signRecords = signService.getSignRecord(username);
-        return ResponseEntity.ok(new ResultMap().success().payloads(signRecords));
+    @GetMapping("/list")
+    public ResponseEntity getSignTask(@CurrentUser User user) {
+        List<SignTaskResult> signTasks = signService.getSignTasks(user.getUsername());
+        return ResponseEntity.ok(new ResultMap().success().payloads(signTasks));
+    }
+
+    @GetMapping("/record")
+    public ResponseEntity getSignRecords(Long id) {
+        List<SignRecord> signRecord = signService.getSignRecord(id);
+        return ResponseEntity.ok(new ResultMap().success().payloads(signRecord));
     }
 }

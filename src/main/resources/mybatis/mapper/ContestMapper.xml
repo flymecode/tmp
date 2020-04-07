@@ -9,6 +9,7 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `title`,
             `course_id`,
+            `clazz_id`,
             `operation_id`,
             `question_paper_id`,
             `name`,
@@ -24,16 +25,17 @@
         <trim prefix=" (" suffix=")" suffixOverrides=",">
             #{title, jdbcType=VARCHAR},
             #{courseId, jdbcType=BIGINT},
+            #{clazzId, jdbcType=BIGINT},
             #{operationId, jdbcType=VARCHAR},
             #{questionPaperId, jdbcType=BIGINT},
             #{name, jdbcType=VARCHAR},
             #{questions, jdbcType=VARCHAR},
             #{type, jdbcType=INTEGER},
             #{state, jdbcType=INTEGER},
-            #{startTime, jdbcType=DATE},
-            #{endTime, jdbcType=DATE},
-            #{createTime, jdbcType=DATE},
-            #{updateTime, jdbcType=DATE}
+            #{startTime},
+            #{endTime},
+            #{createTime},
+            #{updateTime}
         </trim>
     </insert>
 

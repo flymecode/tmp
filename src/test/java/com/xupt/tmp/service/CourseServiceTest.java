@@ -1,5 +1,7 @@
 package com.xupt.tmp.service;
 
+import com.alibaba.fastjson.JSONObject;
+import com.xupt.tmp.dto.ResultMap;
 import com.xupt.tmp.dto.courseDto.CreateCourse;
 import com.xupt.tmp.model.Course;
 import com.xupt.tmp.model.User;
@@ -24,8 +26,8 @@ class CourseServiceTest {
 
     @Test
     void createCourse() {
-         System.out.println("[1,2,3,4]".contains("3"));
-         System.out.println("[1,2,3,4]".contains("5"));
+        System.out.println("[1,2,3,4]".contains("3"));
+        System.out.println("[1,2,3,4]".contains("5"));
     }
 
     @Test
@@ -41,5 +43,11 @@ class CourseServiceTest {
             createCourse.setId(i);
             courseService.addCourse(user, createCourse);
         }
+    }
+
+    @Test
+    void getCourseAndClazz() {
+        ResultMap courseAndClazz = courseService.getCourseAndClazz("");
+        System.out.println(JSONObject.toJSON(courseAndClazz));
     }
 }

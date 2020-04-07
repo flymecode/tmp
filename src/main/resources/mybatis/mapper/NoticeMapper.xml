@@ -1,41 +1,41 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.xupt.tmp.mapper.CourseMapper">
-    <insert id="insert" parameterType="com.xupt.tmp.model.Course">
+<mapper namespace="com.xupt.tmp.mapper.NoticeMapper">
+    <insert id="inster" parameterType="com.xupt.tmp.model.Notice">
         <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
             SELECT LAST_INSERT_ID() AS id
         </selectKey>
-        INSERT INTO `course`
+        INSERT INTO `notice`
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            `create_id`,
-            `create_name`,
-            `period`,
             `name`,
-            `imgUrl`,
+            `content`,
+            `create_id`,
+            `course_id`,
+            `clazz_id`,
+            `weight`,
             `status`,
-            `description`,
-            `create_time`,
-            `update_time`
+            `update_time`,
+            `create_time`
         </trim>
         VALUES
         <trim prefix=" (" suffix=")" suffixOverrides=",">
-            #{createId, jdbcType=VARCHAR},
-            #{createName, jdbcType=VARCHAR},
-            #{period, jdbcType=INTEGER},
             #{name, jdbcType=VARCHAR},
-            #{imgUrl, jdbcType=VARCHAR},
+            #{content, jdbcType=VARCHAR},
+            #{createId, jdbcType=VARCHAR},
+            #{courseId, jdbcType=BIGINT},
+            #{clazzId, jdbcType=BIGINT},
+            #{weight, jdbcType=INTEGER},
             #{status, jdbcType=INTEGER},
-            #{description, jdbcType=VARCHAR},
-            #{createTime},
-            #{updateTime}
+            #{updateTime, jdbcType=DATE},
+            #{createTime, jdbcType=DATE}
         </trim>
     </insert>
 
-    <select id="selectCoursesByIds" resultType="com.xupt.tmp.model.Course">
-        SELECT * FROM course
+    <select id="getNoticeByCourseIds" resultType="com.xupt.tmp.model.Notice">
+        SELECT * FROM notice
         <where>
             <if test="list != null and list.size > 0">
-                id in
+                course_id in
                 <foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
                     #{item}
                 </foreach>

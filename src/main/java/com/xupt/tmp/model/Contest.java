@@ -23,6 +23,18 @@ public class Contest {
      */
     private long courseId;
     /**
+     * 课程名称
+     */
+    private String courseName;
+    /**
+     * 班级Id
+     */
+    private long clazzId;
+    /**
+     * 班级名称
+     */
+    private String clazzName;
+    /**
      * 操作人ID
      */
     private String operationId;

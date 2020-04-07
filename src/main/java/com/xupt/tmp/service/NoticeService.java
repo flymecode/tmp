@@ -1,9 +1,19 @@
 package com.xupt.tmp.service;
 
 import com.xupt.tmp.dto.noticeDto.CreateNotice;
+import com.xupt.tmp.dto.noticeDto.NoticeUpdate;
 import com.xupt.tmp.model.Notice;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 public interface NoticeService {
 
-    Notice addNotice(CreateNotice createNotice);
+    void addNotice(CreateNotice createNotice, HttpServletRequest request);
+
+    List<Notice> getNotices(int page, int limit, HttpServletRequest request);
+
+    void updateNotice(NoticeUpdate noticeUpdate);
+
+    List<Notice> getNoticeByCourseIds(List<Long> courseIds);
 }

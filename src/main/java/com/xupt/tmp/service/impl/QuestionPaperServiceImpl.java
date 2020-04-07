@@ -2,17 +2,20 @@ package com.xupt.tmp.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
+import com.xupt.tmp.common.Consts;
 import com.xupt.tmp.dto.paperDto.QuestionPaperResult;
 import com.xupt.tmp.mapper.QuestionMapper;
 import com.xupt.tmp.mapper.QuestionPaperMapper;
 import com.xupt.tmp.model.Question;
 import com.xupt.tmp.model.QuestionPaper;
+import com.xupt.tmp.model.User;
 import com.xupt.tmp.service.QuestionPaperService;
 import io.jsonwebtoken.lang.Collections;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +63,13 @@ public class QuestionPaperServiceImpl implements QuestionPaperService {
     @Override
     public void deletePaper() {
         questionPaperMapper.deletePaper();
+    }
+
+    @Override
+    public List<QuestionPaper> getPaperName(String name, HttpServletRequest request) {
+        User user = (User)request.getAttribute(Consts.CURRENT_USER);
+        List<QuestionPaper> result = questionPaperMapper.selectPaperName(name, user.getUsername());
+        return result;
     }
 
 

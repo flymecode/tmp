@@ -36,8 +36,8 @@
             #{parse, jdbcType=VARCHAR},
             #{score, jdbcType=BIGINT},
             #{difficulty, jdbcType=INTEGER},
-            #{createTime, jdbcType=DATE},
-            #{updateTime, jdbcType=DATE},
+            #{createTime},
+            #{updateTime},
         </trim>
     </insert>
     <select id="getQuestionsByConditions" resultType="com.xupt.tmp.model.Question"

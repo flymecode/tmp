@@ -15,7 +15,7 @@
             <trim prefix=" (" suffix=")" suffixOverrides=",">
                 #{item.signId, jdbcType=BIGINT},
                 #{item.status, jdbcType=INTEGER},
-                #{item.signTime, jdbcType=DATE},
+                #{item.signTime},
                 #{item.username, jdbcType=VARCHAR},
                 #{item.name, jdbcType=VARCHAR},
             </trim>
@@ -29,6 +29,8 @@
         INSERT INTO `sign_task`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `course_id`,
+            `clazz_id`,
+            `create_id`,
             `name`,
             `create_time`,
             `start_time`,
@@ -37,11 +39,12 @@
         VALUES
         <trim prefix=" (" suffix=")" suffixOverrides=",">
             #{courseId, jdbcType=BIGINT},
+            #{clazzId, jdbcType=BIGINT},
+            #{createId, jdbcType=VARCHAR},
             #{name, jdbcType=VARCHAR},
-            #{createTime, jdbcType=DATE},
-            #{startTime, jdbcType=DATE},
-            #{endTime, jdbcType=DATE},
+            #{createTime},
+            #{startTime},
+            #{endTime},
         </trim>
     </insert>
-
 </mapper>

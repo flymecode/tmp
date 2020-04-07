@@ -1,5 +1,6 @@
 package com.xupt.tmp.service;
 
+import com.xupt.tmp.dto.ResultMap;
 import com.xupt.tmp.dto.courseDto.CreateCourse;
 import com.xupt.tmp.model.Course;
 import com.xupt.tmp.model.User;
@@ -12,6 +13,7 @@ public interface CourseService {
      * 根据创建人id查找课程
      */
     List<Course> getCourses(String createId);
+
     /**
      * 根据课程id查找课程
      */
@@ -22,4 +24,6 @@ public interface CourseService {
     void addCourse(User user, CreateCourse createCourse);
 
     Course getCourseById(Long id);
+
+    ResultMap getCourseAndClazz(String username);
 }

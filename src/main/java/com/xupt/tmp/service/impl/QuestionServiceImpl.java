@@ -5,6 +5,7 @@ import com.xupt.tmp.config.PageUtils;
 import com.xupt.tmp.dto.ResultMap;
 import com.xupt.tmp.dto.questionDto.QuestionQueryParam;
 import com.xupt.tmp.dto.questionDto.QuestionCreate;
+import com.xupt.tmp.dto.questionDto.QuestionResult;
 import com.xupt.tmp.exception.ServerException;
 import com.xupt.tmp.mapper.QuestionMapper;
 import com.xupt.tmp.model.Question;
@@ -15,6 +16,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -57,8 +59,16 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public List<Question> getQuestionsById(List<Long> list) {
-        return questionMapper.selectQuestionByIds(list);
+    public List<QuestionResult> getQuestionsById(List<Long> list) {
+
+        List<Question> questions = questionMapper.selectQuestionByIds(list);
+        List<QuestionResult> questionResults = new ArrayList<>();
+        for (Question question : questions) {
+            QuestionResult questionResult = new QuestionResult();
+            BeanUtils.copyProperties(question, questionResult);
+            questionResults.add(questionResult);
+        }
+        return questionResults;
     }
 
     @Override

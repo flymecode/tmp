@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,5 +31,11 @@ public class QuestionPaperController extends BaseController {
         List<QuestionPaper> list = questionPaperService.getPaperInfo(user.getUsername(), page, limit);
         List<PaperResult> collect = list.stream().map(PaperResult::new).collect(Collectors.toList());
         return ResponseEntity.ok(new ResultMap().success().payloads(collect));
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity getPapers(String name, HttpServletRequest request) {
+        List<QuestionPaper> list = questionPaperService.getPaperName(name, request);
+        return ResponseEntity.ok(new ResultMap().success().payloads(list));
     }
 }

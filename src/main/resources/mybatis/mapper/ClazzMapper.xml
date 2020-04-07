@@ -19,8 +19,8 @@
         </trim>
     </insert>
 
-    <select id="selectContestsByCourseId" resultType="com.xupt.tmp.model.Contest">
-        SELECT * FROM contest
+    <select id="selectClazzsByCourseIds" resultType="com.xupt.tmp.model.Clazz">
+        SELECT `id`,`course_id`,`name` FROM clazz
         <where>
             <if test="list != null and list.size > 0">
                 course_id in

@@ -6,6 +6,7 @@ import com.xupt.tmp.dto.ResultMap;
 import com.xupt.tmp.dto.questionDto.QuestionContest;
 import com.xupt.tmp.dto.questionDto.QuestionCreate;
 import com.xupt.tmp.dto.questionDto.QuestionQueryParam;
+import com.xupt.tmp.dto.questionDto.QuestionResult;
 import com.xupt.tmp.model.Question;
 import com.xupt.tmp.service.QuestionService;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +35,7 @@ public class QuestionController extends BaseController {
 
     @GetMapping
     public ResponseEntity getQuestions(@RequestParam(value = "ids") String ids, HttpServletRequest request) {
-        List<Question> questions = questionService.getQuestionsById(JSONObject.parseArray(ids, Long.class));
+        List<QuestionResult> questions = questionService.getQuestionsById(JSONObject.parseArray(ids, Long.class));
         return ResponseEntity.ok(new ResultMap(tokenUtils).successAndRefreshToken(request).payload(questions));
     }
 

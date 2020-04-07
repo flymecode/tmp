@@ -3,6 +3,7 @@ package com.xupt.tmp.service;
 import com.xupt.tmp.dto.ResultMap;
 import com.xupt.tmp.dto.questionDto.QuestionQueryParam;
 import com.xupt.tmp.dto.questionDto.QuestionCreate;
+import com.xupt.tmp.dto.questionDto.QuestionResult;
 import com.xupt.tmp.model.Question;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public interface QuestionService {
 
     ResultMap deleteQuestionById(long id);
 
-    List<Question> getQuestionsById(List<Long> list);
+    List<QuestionResult> getQuestionsById(List<Long> list);
 
     void addQuestion(QuestionCreate questionCreate);
 }

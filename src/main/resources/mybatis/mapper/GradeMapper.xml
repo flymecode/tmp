@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xupt.tmp.mapper.GradeMapper">
+    <insert id="insert" parameterType="com.xupt.tmp.model.Grade">
+        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
+        INSERT INTO `grade`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            `id`,
+            `student_id`,
+            `contest_id`,
+            `result`,
+            `auto_result`,
+            `manul_result`,
+            `answer_json`,
+            `create_time`,
+            `state`
+        </trim>
+        VALUES
+        <trim prefix=" (" suffix=")" suffixOverrides=",">
+            #{id, jdbcType=BIGINT},
+            #{studentId, jdbcType=VARCHAR},
+            #{contestId, jdbcType=BIGINT},
+            #{result, jdbcType=INTEGER},
+            #{autoResult, jdbcType=INTEGER},
+            #{manulResult, jdbcType=INTEGER},
+            #{answerJson, jdbcType=VARCHAR},
+            #{createTime, jdbcType=DATE},
+            #{state, jdbcType=INTEGER},
+        </trim>
+    </insert>
+
+</mapper>

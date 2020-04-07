@@ -30,9 +30,10 @@ public class QuestionPaper {
      * 试题
      */
     private String questions;
-
-
-
+    /**
+     * 试卷成绩
+     */
+    private int paperScore;
 
     private int status;
 

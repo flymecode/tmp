@@ -3,9 +3,9 @@
 <mapper namespace="com.xupt.tmp.mapper.QuestionPaperMapper">
 
     <insert id="insert" parameterType="com.xupt.tmp.model.QuestionPaper">
-        <!--        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">-->
-        <!--            SELECT LAST_INSERT_ID() AS id-->
-        <!--        </selectKey>-->
+        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
         INSERT INTO `question_paper`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `id`,
@@ -27,4 +27,14 @@
             #{status, jdbcType=INTEGER}
         </trim>
     </insert>
+
+    <select id="selectPaperName" resultType="com.xupt.tmp.model.QuestionPaper">
+        SELECT `id`,`name` FROM question_paper
+        <where>
+            <if test='name != null and name != "" '>
+                name = #{name}
+            </if>
+            and create_id = #{username}
+        </where>
+    </select>
 </mapper>

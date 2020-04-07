@@ -1,8 +1,7 @@
 package com.xupt.tmp.dto.contestDto;
 
+import com.xupt.tmp.model.Contest;
 import lombok.Data;
-
-import java.util.Date;
 
 @Data
 public class ContestResult {
@@ -33,14 +32,35 @@ public class ContestResult {
     /**
      * 测试开始时间
      */
-    private Date startTime;
+    private long startTime;
     /**
      * 测试结束时间
      */
-    private Date endTime;
+    private long endTime;
     /**
-     *  进行状态:0表示未开始,1表示进行中,2表示考试已经结束,3表示该考试已经完成批卷
+     * 当前时间
+     */
+    private long curTime;
+    /**
+     * 进行状态:0表示未开始,1表示进行中,2表示考试已经结束,3表示该考试已经完成批卷
      */
     private int state;
+    private String clazzName;
+    private String courseName;
+
+    public ContestResult(Contest contest) {
+        this.startTime = contest.getStartTime().getTime();
+        this.endTime = contest.getEndTime().getTime();
+        this.curTime = System.currentTimeMillis();
+        this.id = contest.getId();
+        this.title = contest.getTitle();
+        this.name = contest.getName();
+        this.type = contest.getType();
+        this.questions = contest.getQuestions();
+        this.questionPaperId = contest.getQuestionPaperId();
+        this.state = contest.getState();
+        this.clazzName = contest.getClazzName();
+        this.courseName = contest.getCourseName();
+    }
 
 }

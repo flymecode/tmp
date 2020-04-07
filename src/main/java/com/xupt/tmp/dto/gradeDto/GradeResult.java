@@ -1,11 +1,12 @@
-package com.xupt.tmp.model;
+package com.xupt.tmp.dto.gradeDto;
 
+import com.xupt.tmp.dto.questionDto.QuestionFResult;
 import lombok.Data;
 
 import java.util.Date;
-
+import java.util.List;
 @Data
-public class Grade {
+public class GradeResult {
     /**
      * 成绩id
      */
@@ -26,10 +27,6 @@ public class Grade {
      * 自动阅卷成绩
      */
     private int autoResult;
-    /**
-     * 简答题得分
-     */
-    private String scores;
     /**
      * 人工成绩
      */
@@ -52,4 +49,5 @@ public class Grade {
      * 1- 批阅
      */
     private int state;
+    private List<QuestionFResult> questionResults;
 }

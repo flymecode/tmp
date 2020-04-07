@@ -2,35 +2,20 @@ package com.xupt.tmp.dto.contestDto;
 
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 public class ContestCreate {
-    /**
-     * 试卷ID
-     */
-    private long id;
     /**
      * 测试名称
      */
     private String title;
     /**
-     * 试卷名称
+     * 课程ID and 班级ID
      */
-    private String name;
+    private Long[] value;
     /**
-     * 课程ID
+     * 试卷Id
      */
-    private long courseId;
-    /**
-     * 创建人
-     */
-    private String createId;
-
-    /**
-     * 试题
-     */
-    private List<Long> questions;
+    private long questionPaperId;
     /**
      * 测试类型
      */
@@ -39,6 +24,6 @@ public class ContestCreate {
     /**
      * 时间
      */
-    private List<String> time;
+    private Long[] time;
 
 }

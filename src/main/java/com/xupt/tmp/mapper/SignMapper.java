@@ -17,6 +17,15 @@ public interface SignMapper {
     @Update({"update sign_record set status = 1, sign_time = #{date} where username = #{username}"})
     int updateSignRecord(@Param("username") String username, @Param("date") Date date);
 
-    @Select({"select * from sign_record where username = #{username}"})
-    List<SignRecord> selectSignRecords(@Param("username") String username);
+    @Select({"select * from sign_record where sign_id = #{id}"})
+    List<SignRecord> selectSignRecords(@Param("id") Long id);
+
+    @Select({"select * from sign_record where sign_id = #{id} and username = #{username}"})
+    SignRecord selectSignRecord(@Param("id") Long id ,@Param("username") String username);
+
+    @Select({"SELECT sign_task.*,course.name as courseName,clazz.name as clazzName from sign_task,course,clazz where sign_task.create_id = #{username} and course.id=sign_task.course_id and clazz.id=sign_task.clazz_id;"})
+    List<SignTask> selectSignTasks(String username);
+
+    @Select({"select id from sign_task where course_id = #{courseId} and clazz_id = #{clazzId}"})
+    List<Long> selectSignTasksByCourseIdAndClazzId(@Param("courseId") long courseId, @Param("clazzId") long clazzId);
 }

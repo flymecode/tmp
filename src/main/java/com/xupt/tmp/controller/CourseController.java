@@ -29,7 +29,6 @@ public class CourseController {
 
     @PostMapping
     public ResponseEntity addCourse(@CurrentUser User user, @RequestBody CreateCourse createCourse) {
-        log.info(""+createCourse);
         courseService.addCourse(user, createCourse);
         return ResponseEntity.ok(new ResultMap().success());
     }
@@ -38,6 +37,12 @@ public class CourseController {
     public ResponseEntity getCourse(List<Long> courseIds) {
         List<Course>  courses = courseService.getCourses(courseIds);
         return ResponseEntity.ok(new ResultMap().success().payloads(courses));
+    }
+
+    @GetMapping("/info")
+    public ResponseEntity getCourseAndClazz(@CurrentUser User user) {
+        ResultMap courseAndClazz = courseService.getCourseAndClazz(user.getUsername());
+        return ResponseEntity.ok(courseAndClazz);
     }
 
 }
