@@ -1,9 +1,11 @@
 package com.xupt.tmp.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageHelper;
 import com.xupt.tmp.common.Consts;
 import com.xupt.tmp.dto.contestDto.ContestAnswer;
 import com.xupt.tmp.dto.contestDto.ContestCreate;
+import com.xupt.tmp.dto.contestDto.ContestQuery;
 import com.xupt.tmp.dto.contestDto.ContestResult;
 import com.xupt.tmp.mapper.ContestMapper;
 import com.xupt.tmp.mapper.GradeMapper;
@@ -118,9 +120,10 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
-    public List<ContestResult> getContestByCreateId(HttpServletRequest request) {
+    public List<ContestResult> getContestByCreateId(HttpServletRequest request, ContestQuery query) {
         User user = (User) request.getAttribute(Consts.CURRENT_USER);
-        List<Contest> contestByCreateId = contestMapper.getContestByCreateId(user.getUsername());
+        PageHelper.startPage(query.getPage(), query.getLimit());
+        List<Contest> contestByCreateId = contestMapper.getContestByCreateId(user.getUsername(), query.getType());
         List<ContestResult> contestResults = new ArrayList<>();
         for (Contest contest : contestByCreateId) {
             ContestResult contestResult = new ContestResult(contest);

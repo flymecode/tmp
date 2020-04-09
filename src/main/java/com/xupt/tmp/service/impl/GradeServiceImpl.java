@@ -94,7 +94,7 @@ public class GradeServiceImpl implements GradeService {
         Rule rule = new Rule();
         rule.setContestWeight(70);
         rule.setSignWeight(10);
-        rule.setHomeWorkWeight(20);
+        rule.setHomeworkWeight(20);
         String studentsJson = clazzMapper.selectStudents(clazzId);
         List<UserUpload> students = JSONObject.parseArray(studentsJson, UserUpload.class);
         List<GradeSum> gradeSums = students.stream().map(s -> {
@@ -129,7 +129,9 @@ public class GradeServiceImpl implements GradeService {
             // 签到
             for (Long signTaskId : signTaskIds) {
                 SignRecord signRecords = signMapper.selectSignRecord(signTaskId, gradeSum.getUsername());
-                gradeSum.getSignRecords().add(signRecords);
+                if (signRecords != null) {
+                    gradeSum.getSignRecords().add(signRecords);
+                }
             }
             // 平时作业
             for (Contest contest : homework) {
@@ -151,7 +153,6 @@ public class GradeServiceImpl implements GradeService {
             homeworkGradeSum += 100;
         }
         for (GradeSum gradeSum : gradeSums) {
-
             // 平时
             List<SignRecord> signRecords = gradeSum.getSignRecords();
             int signTemp = 0;
@@ -170,7 +171,10 @@ public class GradeServiceImpl implements GradeService {
             for (Grade grade : grades) {
                 contestGradeTemp += grade.getResult();
             }
-            int contestGrade = contestGradeTemp * rule.getContestWeight() / contestGradeSum;
+            int contestGrade = 0;
+            if (contestGradeSum != 0) {
+                contestGrade = contestGradeTemp * rule.getContestWeight() / contestGradeSum;
+            }
             gradeSum.setContestGrade(contestGrade);
 
             // 平时
@@ -179,7 +183,10 @@ public class GradeServiceImpl implements GradeService {
             for (Grade homeworkGrade : homeworkGrades) {
                 homeworkGradeTemp += homeworkGrade.getResult();
             }
-            int homeworkGrade = homeworkGradeTemp * rule.getHomeWorkWeight() / homeworkGradeSum;
+            int homeworkGrade = 0;
+            if (homeworkGradeSum != 0) {
+                homeworkGrade = homeworkGradeTemp * rule.getHomeworkWeight() / homeworkGradeSum;
+            }
             gradeSum.setHomeWorkGrade(homeworkGrade);
             // 设置总成绩
             gradeSum.setResult(contestGrade + signGrade + homeworkGrade);

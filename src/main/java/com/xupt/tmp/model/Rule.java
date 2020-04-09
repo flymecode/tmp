@@ -16,7 +16,7 @@ public class Rule {
     /**
      * 平时作业比重
      */
-    private int homeWorkWeight;
+    private int homeworkWeight;
 
     /**
      * 创建人

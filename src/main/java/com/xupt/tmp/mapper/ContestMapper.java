@@ -25,11 +25,11 @@ public interface ContestMapper {
     @Select({
             "SELECT contest.*,course.name AS courseName,clazz.name AS clazzName " +
                     "FROM contest,course,clazz " +
-                    "WHERE contest.operation_id = #{username} and type = 1" +
+                    "WHERE contest.operation_id = #{username} and type = #{type} " +
                     "AND course.id = contest.course_id " +
                     "AND clazz.id = contest.clazz_id"
     })
-    List<Contest> getContestByCreateId(@Param("username") String username);
+    List<Contest> getContestByCreateId(@Param("username") String username, @Param("type") int type);
 
     @Select("select * from contest where course_id=#{courseId} and clazz_id=#{clazzId}")
     List<Contest> selectContestsByCourseIdAndClazzId(@Param("courseId") long courseId, @Param("clazzId") long clazzId);

@@ -6,6 +6,7 @@ import com.xupt.tmp.common.Consts;
 import com.xupt.tmp.dto.ResultMap;
 import com.xupt.tmp.dto.contestDto.ContestAnswer;
 import com.xupt.tmp.dto.contestDto.ContestCreate;
+import com.xupt.tmp.dto.contestDto.ContestQuery;
 import com.xupt.tmp.dto.contestDto.ContestResult;
 import com.xupt.tmp.model.Contest;
 import com.xupt.tmp.model.Grade;
@@ -32,14 +33,17 @@ public class ContestController {
     @Autowired
     private ContestService contestService;
 
+    /**
+     * 创建测试（考试/平时作业）
+     */
     @PostMapping
     public ResponseEntity createContest(@Valid @RequestBody ContestCreate contestCreate,
-                                        @ApiIgnore BindingResult bindingResult,HttpServletRequest request) throws ParseException {
+                                        @ApiIgnore BindingResult bindingResult, HttpServletRequest request) throws ParseException {
         if (bindingResult.hasErrors()) {
             ResultMap resultMap = new ResultMap().fail().message(bindingResult.getFieldErrors().get(0).getDefaultMessage());
             return ResponseEntity.status(resultMap.getCode()).body(resultMap);
         }
-        contestService.createContest(contestCreate,request);
+        contestService.createContest(contestCreate, request);
         return ResponseEntity.ok(new ResultMap().success());
     }
 
@@ -98,9 +102,9 @@ public class ContestController {
      * @param request
      * @return
      */
-    @GetMapping("/list")
-    public ResponseEntity getContestByCreateId(HttpServletRequest request) {
-        List<ContestResult> list = contestService.getContestByCreateId(request);
+    @PostMapping("/list")
+    public ResponseEntity getContestByCreateId(@RequestBody ContestQuery query, HttpServletRequest request) {
+        List<ContestResult> list = contestService.getContestByCreateId(request, query);
         return ResponseEntity.ok(new ResultMap().success().payload(list));
     }
 }
