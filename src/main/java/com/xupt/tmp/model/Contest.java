@@ -51,7 +51,7 @@ public class Contest {
      */
     private String questions;
     /**
-     * 测试类型
+     * 测试类型 1-测试 2-作业
      */
     private int type;
     /**

@@ -53,7 +53,7 @@ public class GradeController {
      * @param query
      * @return
      */
-    @GetMapping("/sum")
+    @PostMapping("/sum")
     public ResponseEntity getFinalGrade(@RequestBody GradeQuery query) {
         List<GradeSum> gradeSums = gradeService.getGradeSum(query);
         return ResponseEntity.ok(new ResultMap().success().payload(gradeSums));

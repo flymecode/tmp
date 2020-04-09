@@ -11,6 +11,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -92,7 +93,8 @@ public class GradeServiceImpl implements GradeService {
         //Rule rule = ruleMapper.selectRulesById(ruleId);
         Rule rule = new Rule();
         rule.setContestWeight(70);
-        rule.setSignWeight(30);
+        rule.setSignWeight(10);
+        rule.setHomeWorkWeight(20);
         String studentsJson = clazzMapper.selectStudents(clazzId);
         List<UserUpload> students = JSONObject.parseArray(studentsJson, UserUpload.class);
         List<GradeSum> gradeSums = students.stream().map(s -> {
@@ -102,27 +104,55 @@ public class GradeServiceImpl implements GradeService {
         }).collect(Collectors.toList());
 
         // 获取课程/班级所有测试
-        List<Contest> contests = contestMapper.selectContestsByCourseIdAndClazzId(courseId, clazzId);
+        List<Contest> works = contestMapper.selectContestsByCourseIdAndClazzId(courseId, clazzId);
+        List<Contest> contests = new ArrayList<>();
+        List<Contest> homework = new ArrayList<>();
+
+        for (Contest work : works) {
+            if (work.getType() == 1) {
+                contests.add(work);
+            } else {
+                homework.add(work);
+            }
+        }
+
         // 获取课程/班级所有签到任务
         List<Long> signTaskIds = signMapper.selectSignTasksByCourseIdAndClazzId(courseId, clazzId);
-
         for (GradeSum gradeSum : gradeSums) {
+            // 考试
             for (Contest contest : contests) {
                 Grade grade = gradeMapper.selectGradeRecode(contest.getId(), gradeSum.getUsername());
-                gradeSum.getGrades().add(grade);
+                if (grade != null) {
+                    gradeSum.getGrades().add(grade);
+                }
             }
+            // 签到
             for (Long signTaskId : signTaskIds) {
                 SignRecord signRecords = signMapper.selectSignRecord(signTaskId, gradeSum.getUsername());
                 gradeSum.getSignRecords().add(signRecords);
             }
+            // 平时作业
+            for (Contest contest : homework) {
+                Grade grade = gradeMapper.selectGradeRecode(contest.getId(), gradeSum.getUsername());
+                if (grade != null) {
+                    gradeSum.getHomeworkGrades().add(grade);
+                }
+            }
+
         }
 
         int contestGradeSum = 0;
+        int homeworkGradeSum = 0;
         // TODO 获取测试成绩
         for (Contest contest : contests) {
             contestGradeSum += 100;
         }
+        for (Contest contest : homework) {
+            homeworkGradeSum += 100;
+        }
         for (GradeSum gradeSum : gradeSums) {
+
+            // 平时
             List<SignRecord> signRecords = gradeSum.getSignRecords();
             int signTemp = 0;
             for (SignRecord signRecord : signRecords) {
@@ -134,6 +164,7 @@ public class GradeServiceImpl implements GradeService {
             long signGrade = signTemp * rule.getSignWeight() / signCount;
             gradeSum.setSignGrade(signGrade);
 
+            // 考试
             List<Grade> grades = gradeSum.getGrades();
             int contestGradeTemp = 0;
             for (Grade grade : grades) {
@@ -141,7 +172,17 @@ public class GradeServiceImpl implements GradeService {
             }
             int contestGrade = contestGradeTemp * rule.getContestWeight() / contestGradeSum;
             gradeSum.setContestGrade(contestGrade);
-            gradeSum.setResult(contestGrade + signGrade);
+
+            // 平时
+            List<Grade> homeworkGrades = gradeSum.getHomeworkGrades();
+            int homeworkGradeTemp = 0;
+            for (Grade homeworkGrade : homeworkGrades) {
+                homeworkGradeTemp += homeworkGrade.getResult();
+            }
+            int homeworkGrade = homeworkGradeTemp * rule.getHomeWorkWeight() / homeworkGradeSum;
+            gradeSum.setHomeWorkGrade(homeworkGrade);
+            // 设置总成绩
+            gradeSum.setResult(contestGrade + signGrade + homeworkGrade);
         }
         return gradeSums;
     }

@@ -28,6 +28,8 @@ class GradeServiceTest {
     @Test
     void getGradeSum() {
         GradeQuery query = new GradeQuery();
+        long[] r = {1, 4};
+        query.setValue(r);
         List<GradeSum> gradeSum = gradeService.getGradeSum(query);
         System.out.println(gradeSum);
 

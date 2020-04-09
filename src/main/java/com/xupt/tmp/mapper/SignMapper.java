@@ -26,6 +26,6 @@ public interface SignMapper {
     @Select({"SELECT sign_task.*,course.name as courseName,clazz.name as clazzName from sign_task,course,clazz where sign_task.create_id = #{username} and course.id=sign_task.course_id and clazz.id=sign_task.clazz_id;"})
     List<SignTask> selectSignTasks(String username);
 
-    @Select({"select id from sign_task where course_id = #{courseId} and clazz_id = #{clazzId}"})
+    @Select({"select `id` from sign_task where course_id = #{courseId} and clazz_id = #{clazzId}"})
     List<Long> selectSignTasksByCourseIdAndClazzId(@Param("courseId") long courseId, @Param("clazzId") long clazzId);
 }

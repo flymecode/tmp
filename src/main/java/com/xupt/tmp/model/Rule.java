@@ -12,4 +12,14 @@ public class Rule {
      * 签到比重
      */
     private int signWeight;
+
+    /**
+     * 平时作业比重
+     */
+    private int homeWorkWeight;
+
+    /**
+     * 创建人
+     */
+    private String username;
 }

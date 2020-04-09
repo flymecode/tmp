@@ -18,7 +18,11 @@ public class GradeSum {
     private long result;
     private long signGrade;
     private long contestGrade;
+    private long homeWorkGrade;
+
     private List<Grade> grades = new ArrayList<>();
+    private List<Grade> homeworkGrades = new ArrayList<>();
+
     private List<Contest> contests = new ArrayList<>();
     private List<SignRecord> signRecords = new ArrayList<>();
 }

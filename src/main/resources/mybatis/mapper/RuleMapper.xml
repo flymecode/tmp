@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xupt.tmp.mapper.ClazzMapper">
+    <insert id="insert" parameterType="com.xupt.tmp.model.Rule">
+        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
+        INSERT INTO `rule`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            `sign_weight`,
+            `contest_weight`,
+            `username`
+        </trim>
+        VALUES
+        <trim prefix=" (" suffix=")" suffixOverrides=",">
+            #{signWeight, jdbcType=BIGINT},
+            #{contestWeight, jdbcType=BIGINT},
+            #{username, jdbcType=VARCHAR}
+        </trim>
+    </insert>
+
+</mapper>

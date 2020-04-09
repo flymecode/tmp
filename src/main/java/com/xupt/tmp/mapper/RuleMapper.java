@@ -13,4 +13,6 @@ public interface RuleMapper {
 
     @Select("select * from rule where id = #{ruleId}")
     Rule selectRulesById(@Param("ruleId") int ruleId);
+
+    int insert(Rule rule);
 }
