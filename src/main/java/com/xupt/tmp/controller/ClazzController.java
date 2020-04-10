@@ -34,10 +34,9 @@ public class ClazzController {
         return ResponseEntity.ok(new ResultMap().success());
     }
 
-    @GetMapping(value = "/info")
-    public ResponseEntity getClazzByClazzId(long clazzId) {
+    @GetMapping("/info")
+    public ResponseEntity getClazzByClazzId(@RequestParam("id") long clazzId) {
         List<UserUpload> studnets = clazzService.getClazzStudnets(clazzId);
         return ResponseEntity.ok(new ResultMap().success().payloads(studnets));
     }
-
 }

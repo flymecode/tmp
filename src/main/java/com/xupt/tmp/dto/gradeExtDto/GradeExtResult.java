@@ -3,8 +3,8 @@ package com.xupt.tmp.dto.gradeExtDto;
 import lombok.Data;
 
 @Data
-public class GradeExtQuery {
+public class GradeExtResult {
     private String username;
-    private long clazzId;
-    private long courseId;
+    private String name;
+    private int result;
 }

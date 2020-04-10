@@ -21,6 +21,8 @@ public class Reply {
      * 学号
      */
     private String username;
+    private String courseName;
+    private String clazzName;
     /**
      * 姓名
      */
@@ -54,7 +56,7 @@ public class Reply {
      */
     private int type;
     /**
-     * 是否通过
+     * 是否通过 0-初始化 1-同意 2-不同意
      */
     private Boolean agree;
     /**

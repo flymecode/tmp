@@ -8,10 +8,13 @@ import java.util.List;
 
 public interface ReplyMapper {
 
-    // TODO 创建申请/ 班级/课程/老师
     int insert(Reply reply);
 
-    @Select({"select * from reply where teacher_id = #{username}"})
+    @Select({"select reply.*,course.name as courseName,clazz.name as clazzName " +
+            "from reply,course,clazz " +
+            "where reply.teacher_id = #{username} and reply.agree = 0 " +
+            "and course.id = reply.course_id " +
+            "and clazz.id = reply.clazz_id"})
     List<Reply> selectReply(String username);
 
     @Update({"update reply set agree=#{agree} where id = #{id}"})

@@ -1,41 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.xupt.tmp.mapper.ReplyMapper">
-    <insert id="insert" parameterType="com.xupt.tmp.model.Reply">
+<mapper namespace="com.xupt.tmp.mapper.GradeExtMapper">
+    <insert id="insert" parameterType="com.xupt.tmp.model.GradeExt">
         <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
             SELECT LAST_INSERT_ID() AS id
         </selectKey>
-        INSERT INTO `reply`
+        INSERT INTO `grade_ext`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `username`,
-            `name`,
-            `teacher_id`,
-            `reason`,
-            `message`,
-            `agree`,
+            `title`,
             `clazz_id`,
             `course_id`,
-            `start_time`,
-            `end_time`,
             `type`,
-            `update_time`,
-            `create_time`
+            `grade`
         </trim>
         VALUES
         <trim prefix=" (" suffix=")" suffixOverrides=",">
             #{username, jdbcType=VARCHAR},
-            #{name, jdbcType=VARCHAR},
-            #{teacherId, jdbcType=BIGINT},
-            #{reason, jdbcType=VARCHAR},
-            #{message, jdbcType=VARCHAR},
-            #{agree},
+            #{title, jdbcType=VARCHAR},
             #{clazzId, jdbcType=BIGINT},
             #{courseId, jdbcType=BIGINT},
-            #{startTime},
-            #{endTime},
-            #{type, jdbcType=BIGINT},
-            #{updateTime},
-            #{createTime}
+            #{type},
+            #{grade}
         </trim>
     </insert>
 

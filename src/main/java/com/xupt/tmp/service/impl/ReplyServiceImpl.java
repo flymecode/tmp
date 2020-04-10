@@ -4,7 +4,9 @@ import com.github.pagehelper.PageHelper;
 import com.xupt.tmp.common.Consts;
 import com.xupt.tmp.dto.replyDto.CreateReply;
 import com.xupt.tmp.dto.replyDto.ReplyQuery;
+import com.xupt.tmp.mapper.CourseMapper;
 import com.xupt.tmp.mapper.ReplyMapper;
+import com.xupt.tmp.model.Course;
 import com.xupt.tmp.model.Reply;
 import com.xupt.tmp.model.User;
 import com.xupt.tmp.service.ReplyService;
@@ -21,6 +23,9 @@ public class ReplyServiceImpl implements ReplyService {
     @Autowired
     private ReplyMapper replyMapper;
 
+    @Autowired
+    private CourseMapper courseMapper;
+
     @Override
     public List<Reply> getReplys(String username, ReplyQuery query) {
         PageHelper.startPage(query.getPage(), query.getLimit());
@@ -36,6 +41,8 @@ public class ReplyServiceImpl implements ReplyService {
         reply.setAgree(false);
         reply.setCourseId(value[0]);
         reply.setClazzId(value[1]);
+        Course course = courseMapper.selectCourseById(value[0]);
+        reply.setTeacherId(course.getCreateId());
         reply.setCreateTime(new Date());
         reply.setUpdateTime(new Date());
         reply.setName(user.getName());
@@ -46,9 +53,7 @@ public class ReplyServiceImpl implements ReplyService {
             reply.setStartTime(createReply.getStartTime());
             reply.setEndTime(createReply.getEndTime());
         }
-        // TODO Mapper -- insert
         replyMapper.insert(reply);
-
     }
 
     @Override
