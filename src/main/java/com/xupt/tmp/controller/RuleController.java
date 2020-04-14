@@ -9,9 +9,7 @@ import com.xupt.tmp.service.RuleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,5 +24,11 @@ public class RuleController {
     public ResponseEntity getRules(@CurrentUser User user) {
         List<Rule> ruleList = ruleService.getRules(user.getUsername());
         return ResponseEntity.ok(new ResultMap().success().payload(ruleList));
+    }
+
+    @PostMapping
+    public ResponseEntity createRule(@RequestBody Rule rule, @CurrentUser User user) {
+        ruleService.addRule(rule, user);
+        return ResponseEntity.ok(new ResultMap().success());
     }
 }

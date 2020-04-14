@@ -5,6 +5,7 @@ import com.xupt.tmp.dto.clazzDto.CreateClazz;
 import com.xupt.tmp.dto.userDto.UserUpload;
 import com.xupt.tmp.mapper.ClazzMapper;
 import com.xupt.tmp.mapper.SelectCourseTableMapper;
+import com.xupt.tmp.mapper.UCCMapper;
 import com.xupt.tmp.model.Clazz;
 import com.xupt.tmp.model.SelectCourseTable;
 import com.xupt.tmp.service.ClazzService;
@@ -26,6 +27,9 @@ public class ClazzServiceImpl implements ClazzService {
     @Autowired
     private SelectCourseTableMapper selectCourseTableMapper;
 
+    @Autowired
+    private UCCMapper uccMapper;
+
     @Override
     public List<Clazz> getClazzs(long courseId) {
         List<Clazz> clazzs = clazzMapper.selectClazzs(courseId);
@@ -45,6 +49,9 @@ public class ClazzServiceImpl implements ClazzService {
         List<UserUpload> students = createClazz.getStudents();
         clazz.setStudents(JSONObject.toJSONString(students));
         if (clazzMapper.insert(clazz) > 0) {
+            for (UserUpload student : students) {
+                uccMapper.insert(courseId, clazz.getId(), student.getUsername(), student.getName());
+            }
             for (UserUpload student : students) {
                 String courseTable = selectCourseTableMapper.selectCourseTable(student.getUsername());
                 if (courseTable == null) {
@@ -68,7 +75,7 @@ public class ClazzServiceImpl implements ClazzService {
     public List<UserUpload> getClazzStudnets(long clazzId) {
         String students = clazzMapper.selectStudents(clazzId);
         List<UserUpload> userUploads = JSONObject.parseArray(students, UserUpload.class);
-        if (userUploads == null ) {
+        if (userUploads == null) {
             return new ArrayList<>();
         }
         return userUploads;

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -35,7 +36,7 @@ public class CourseController {
 
     @GetMapping("/s")
     public ResponseEntity getCourse(List<Long> courseIds) {
-        List<Course>  courses = courseService.getCourses(courseIds);
+        List<Course> courses = courseService.getCourses(courseIds);
         return ResponseEntity.ok(new ResultMap().success().payloads(courses));
     }
 
@@ -43,6 +44,16 @@ public class CourseController {
     public ResponseEntity getCourseAndClazz(@CurrentUser User user) {
         ResultMap courseAndClazz = courseService.getCourseAndClazz(user.getUsername());
         return ResponseEntity.ok(courseAndClazz);
+    }
+
+    @PostMapping("/my")
+    public ResponseEntity getMyCourse(@RequestBody Long[] courseIds) {
+        List<Long> list = new ArrayList<>();
+        for (Long courseId : courseIds) {
+            list.add(courseId);
+        }
+        List<Course> courses = courseService.getCourses(list);
+        return ResponseEntity.ok(new ResultMap().success().payloads(courses));
     }
 
 }

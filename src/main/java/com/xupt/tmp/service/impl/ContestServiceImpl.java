@@ -46,6 +46,7 @@ public class ContestServiceImpl implements ContestService {
         contest.setName(questionPaper.getName());
         contest.setQuestions(questionPaper.getQuestions());
         contest.setOperationId(user.getUsername());
+        contest.setPaperScore(questionPaper.getPaperScore());
         contestMapper.insert(contest);
     }
 

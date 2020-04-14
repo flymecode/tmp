@@ -2,6 +2,7 @@ package com.xupt.tmp.dto.gradeDto;
 
 import com.xupt.tmp.model.Contest;
 import com.xupt.tmp.model.Grade;
+import com.xupt.tmp.model.GradeExt;
 import com.xupt.tmp.model.SignRecord;
 import lombok.Data;
 
@@ -19,7 +20,9 @@ public class GradeSum {
     private long signGrade;
     private long contestGrade;
     private long homeWorkGrade;
+    private long others;
 
+    private List<GradeExt> gradeExts = new ArrayList<>();
     private List<Grade> grades = new ArrayList<>();
     private List<Grade> homeworkGrades = new ArrayList<>();
 

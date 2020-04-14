@@ -7,9 +7,15 @@ import java.util.Date;
 @Data
 public class CreateReply {
     /**
+     * 签到id
+     */
+    private long signId;
+    /**
      * 班级id/课程id
      */
-    private long[] value;
+    private long clazzId;
+
+    private long courseId;
     /**
      * 原因
      */
@@ -18,11 +24,7 @@ public class CreateReply {
     /**
      * 开始时间
      */
-    private Date startTime;
-    /**
-     * 结束时间
-     */
-    private Date endTime;
+    private Date[] date;
     /**
      * 类型 1-请假 2-申诉
      */

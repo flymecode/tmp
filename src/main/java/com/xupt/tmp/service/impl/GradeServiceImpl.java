@@ -2,6 +2,7 @@ package com.xupt.tmp.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.xupt.tmp.dto.gradeDto.*;
+import com.xupt.tmp.dto.gradeExtDto.GradeExtQuery;
 import com.xupt.tmp.dto.questionDto.QuestionFResult;
 import com.xupt.tmp.dto.userDto.UserUpload;
 import com.xupt.tmp.mapper.*;
@@ -37,6 +38,12 @@ public class GradeServiceImpl implements GradeService {
 
     @Autowired
     private ClazzMapper clazzMapper;
+
+    @Autowired
+    private GradeExtMapper gradeExtMapper;
+
+    @Autowired
+    private UCCMapper uccMapper;
 
     @Override
     public void addGrade(Grade grade) {
@@ -89,17 +96,19 @@ public class GradeServiceImpl implements GradeService {
         long[] value = query.getValue();
         long courseId = value[0];
         long clazzId = value[1];
-
-        //Rule rule = ruleMapper.selectRulesById(ruleId);
-        Rule rule = new Rule();
-        rule.setContestWeight(70);
-        rule.setSignWeight(10);
-        rule.setHomeworkWeight(20);
+        Rule rule = ruleMapper.selectRulesById(ruleId);
         String studentsJson = clazzMapper.selectStudents(clazzId);
         List<UserUpload> students = JSONObject.parseArray(studentsJson, UserUpload.class);
         List<GradeSum> gradeSums = students.stream().map(s -> {
             GradeSum gradeSum = new GradeSum();
             BeanUtils.copyProperties(s, gradeSum);
+            // 添加平时成绩
+            List<GradeExt> list = gradeExtMapper.selectGradeExts(s.getUsername());
+            if (list != null) {
+                int others = list.stream().map(GradeExt::getGrade).reduce(0, Integer::sum);
+                gradeSum.setOthers(others);
+                gradeSum.setGradeExts(list);
+            }
             return gradeSum;
         }).collect(Collectors.toList());
 
@@ -145,22 +154,17 @@ public class GradeServiceImpl implements GradeService {
 
         int contestGradeSum = 0;
         int homeworkGradeSum = 0;
-        // TODO 获取测试成绩
         for (Contest contest : contests) {
-            contestGradeSum += 100;
+            contestGradeSum += contest.getPaperScore();
         }
         for (Contest contest : homework) {
-            homeworkGradeSum += 100;
+            homeworkGradeSum += contest.getPaperScore();
         }
         for (GradeSum gradeSum : gradeSums) {
             // 平时
             List<SignRecord> signRecords = gradeSum.getSignRecords();
-            int signTemp = 0;
-            for (SignRecord signRecord : signRecords) {
-                if (signRecord.getStatus() == 1) {
-                    signTemp++;
-                }
-            }
+            // 签到次数
+            long signTemp = signRecords.stream().filter(signRecord -> signRecord.getStatus() == 1).count();
             int signCount = signTaskIds.size();
             long signGrade = signTemp * rule.getSignWeight() / signCount;
             gradeSum.setSignGrade(signGrade);
@@ -189,9 +193,91 @@ public class GradeServiceImpl implements GradeService {
             }
             gradeSum.setHomeWorkGrade(homeworkGrade);
             // 设置总成绩
-            gradeSum.setResult(contestGrade + signGrade + homeworkGrade);
+            gradeSum.setResult(contestGrade + signGrade + homeworkGrade + gradeSum.getOthers());
         }
         return gradeSums;
     }
 
+    @Override
+    public List<GradeMyResult> getMyGrade(String username, int ruleId) {
+        Rule rule = ruleMapper.selectRulesById(ruleId);
+        List<UCCRelation> uccRelations = uccMapper.selectRelation(username);
+
+        List<GradeMyResult> results = uccRelations.stream().map(e -> {
+            GradeMyResult result = new GradeMyResult();
+            result.setClazzId(e.getClazzId());
+            result.setCourseId(e.getCourseId());
+            result.setCourseName(e.getCourseName());
+            result.setClazzName(e.getClazzName());
+            return result;
+        }).collect(Collectors.toList());
+
+        // 查询考试和作业
+        for (GradeMyResult result : results) {
+            List<Contest> tempContest = contestMapper.selectContestsByCourseIdAndClazzId(result.getCourseId(), result.getClazzId());
+            result.addContests(tempContest);
+            List<Contest> contests = result.getContests();
+            List<ContestAndGradeRelation> contestRelations = result.getContestRelations();
+            int tempContestScore = 0;
+            for (Contest contest : contests) {
+                Grade grade = gradeMapper.selectGradeRecode(contest.getId(), username);
+                if (grade != null) {
+                    tempContestScore += grade.getResult();
+                    ContestAndGradeRelation gradeRelation = new ContestAndGradeRelation(contest, grade);
+                    contestRelations.add(gradeRelation);
+                }
+            }
+            // 设置测试成绩
+            if (result.getContestGradeSum() != 0) {
+                result.setContestGrade(tempContestScore * rule.getContestWeight() / result.getContestGradeSum());
+            }
+            List<Contest> homework = result.getHomework();
+            List<ContestAndGradeRelation> homeworkRelations = result.getHomeworkRelations();
+            int homeworkScore = 0;
+            for (Contest contest : homework) {
+                Grade grade = gradeMapper.selectGradeRecode(contest.getId(), username);
+                homeworkScore += grade.getResult();
+                ContestAndGradeRelation gradeRelation = new ContestAndGradeRelation(contest, grade);
+                homeworkRelations.add(gradeRelation);
+            }
+            // 设置作业成绩
+            if (result.getContestGradeSum() != 0) {
+                result.setContestGrade(homeworkScore * rule.getHomeworkWeight() / result.getContestGradeSum());
+            }
+            // 查询签到
+            List<Long> signIds = signMapper.selectSignTasksByCourseIdAndClazzId(result.getCourseId(), result.getClazzId());
+            int size = 0;
+            int tempSign = 0;
+            List<SignRecord> signRecords = result.getSignRecords();
+            for (Long signId : signIds) {
+                SignRecord signRecord = signMapper.selectSignRecord(signId, username);
+                if (signRecord != null) {
+                    signRecords.add(signRecord);
+                    size++;
+                    if (signRecord.getStatus() == 1) {
+                        tempSign++;
+                    }
+                    if (size != 0) {
+                        result.setSignGrade(tempSign * rule.getSignWeight() / size);
+                    }
+                }
+            }
+            GradeExtQuery query = new GradeExtQuery();
+            query.setUsername(username);
+            query.setClazzId(result.getClazzId());
+            query.setCourseId(result.getCourseId());
+            List<GradeExt> list = gradeExtMapper.selectGradeExtsInfo(query);
+            result.setGradeExts(list);
+            int tempGradeExt = 0;
+            int gradeExtSize = list.size();
+            for (GradeExt gradeExt : list) {
+                tempGradeExt += gradeExt.getGrade();
+            }
+            if (gradeExtSize != 0) {
+                result.setOthersGrade(tempGradeExt * rule.getOthersWeight() / gradeExtSize);
+            }
+
+        }
+        return results;
+    }
 }

@@ -18,6 +18,10 @@ public class Reply {
      */
     private String teacherId;
     /**
+     * 签到id
+     */
+    private long signId;
+    /**
      * 学号
      */
     private String username;
@@ -52,7 +56,7 @@ public class Reply {
      */
     private Date endTime;
     /**
-     * 类型
+     * 类型 2-请假 1-忘记签到
      */
     private int type;
     /**

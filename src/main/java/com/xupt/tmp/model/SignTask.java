@@ -46,4 +46,10 @@ public class SignTask {
      * 结束时间
      */
     private Date endTime;
+
+    /**
+     * 是否签到
+     */
+    private int status;
+
 }

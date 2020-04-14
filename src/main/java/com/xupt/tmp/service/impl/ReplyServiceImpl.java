@@ -35,23 +35,24 @@ public class ReplyServiceImpl implements ReplyService {
     @Override
     public void createReply(CreateReply createReply, HttpServletRequest request) {
         Reply reply = new Reply();
-        long[] value = createReply.getValue();
         int type = createReply.getType();
-        User user = (User)request.getAttribute(Consts.CURRENT_USER);
+        User user = (User) request.getAttribute(Consts.CURRENT_USER);
         reply.setAgree(false);
-        reply.setCourseId(value[0]);
-        reply.setClazzId(value[1]);
-        Course course = courseMapper.selectCourseById(value[0]);
+        reply.setCourseId(createReply.getCourseId());
+        reply.setClazzId(createReply.getClazzId());
+        Course course = courseMapper.selectCourseById(createReply.getCourseId());
         reply.setTeacherId(course.getCreateId());
         reply.setCreateTime(new Date());
         reply.setUpdateTime(new Date());
+        reply.setSignId(createReply.getSignId());
         reply.setName(user.getName());
         reply.setUsername(user.getUsername());
         reply.setReason(createReply.getReason());
         reply.setType(type);
         if (type != 1) {
-            reply.setStartTime(createReply.getStartTime());
-            reply.setEndTime(createReply.getEndTime());
+            Date[] date = createReply.getDate();
+            reply.setStartTime(date[0]);
+            reply.setEndTime(date[1]);
         }
         replyMapper.insert(reply);
     }

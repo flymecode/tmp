@@ -34,7 +34,9 @@ public class QuestionPaper {
      * 试卷成绩
      */
     private int paperScore;
-
+    /**
+     * 额外字段
+     */
     private int status;
 
     private Date createTime;

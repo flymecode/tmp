@@ -46,6 +46,16 @@ public class QuestionPaperServiceImpl implements QuestionPaperService {
 
     @Override
     public QuestionPaperResult addPaper(QuestionPaper questionPaper) {
+        String questions = questionPaper.getQuestions();
+        List<Long> questionIds = JSONObject.parseArray(questions, Long.class);
+        List<Question> questionList = questionMapper.selectQuestionByIds(questionIds);
+        if (questionList != null) {
+            int score = 0;
+            for (Question question : questionList) {
+                score += question.getScore();
+            }
+            questionPaper.setPaperScore(score);
+        }
         questionPaperMapper.insert(questionPaper);
         return new QuestionPaperResult();
     }
@@ -67,7 +77,7 @@ public class QuestionPaperServiceImpl implements QuestionPaperService {
 
     @Override
     public List<QuestionPaper> getPaperName(String name, HttpServletRequest request) {
-        User user = (User)request.getAttribute(Consts.CURRENT_USER);
+        User user = (User) request.getAttribute(Consts.CURRENT_USER);
         List<QuestionPaper> result = questionPaperMapper.selectPaperName(name, user.getUsername());
         return result;
     }

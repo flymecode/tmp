@@ -15,4 +15,5 @@ public interface RuleMapper {
     Rule selectRulesById(@Param("ruleId") int ruleId);
 
     int insert(Rule rule);
+
 }

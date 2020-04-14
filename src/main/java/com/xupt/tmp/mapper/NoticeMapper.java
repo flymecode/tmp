@@ -18,4 +18,10 @@ public interface NoticeMapper {
     int updateNotice(Notice notice);
 
     List<Notice> getNoticeByCourseIds(List<Long> courseIds);
+
+    @Select({"select notice.*, course.name as courseName, clazz.name as clazzName " +
+            "from notice,course,clazz " +
+            "where notice.course_id = #{courseId} and clazz_id = #{clazzId} " +
+            "and notice.course_id = course.id and notice.clazz_id = clazz.id"})
+    List<Notice> selectNoticesByCourseIdAndClazzId(@Param("courseId") long courseId, @Param("clazzId") long clazzId);
 }

@@ -55,6 +55,10 @@ public class Contest {
      */
     private int type;
     /**
+     * 测试成绩
+     */
+    private int paperScore;
+    /**
      * 测试开始时间
      */
     private Date startTime;
@@ -63,10 +67,9 @@ public class Contest {
      */
     private Date endTime;
     /**
-     *  进行状态:0表示未开始,1表示进行中,2表示考试已经结束,3表示该考试已经完成批卷
+     * 进行状态:0表示未开始,1表示进行中,2表示考试已经结束,3表示该考试已经完成批卷
      */
     private int state;
-
     /**
      * 创建时间
      */

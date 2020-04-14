@@ -8,16 +8,20 @@
         INSERT INTO `rule`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `sign_weight`,
+            `others_weight`,
             `contest_weight`,
             `homework_weight`,
-            `username`
+            `username`,
+            `name`,
         </trim>
         VALUES
         <trim prefix=" (" suffix=")" suffixOverrides=",">
-            #{signWeight, jdbcType=BIGINT},
-            #{contestWeight, jdbcType=BIGINT},
-            #{homeworkWeight, jdbcType=BIGINT},
-            #{username, jdbcType=VARCHAR}
+            #{signWeight},
+            #{othersWeight},
+            #{contestWeight},
+            #{homeworkWeight},
+            #{username, jdbcType=VARCHAR},
+            #{name, jdbcType=VARCHAR}
         </trim>
     </insert>
 

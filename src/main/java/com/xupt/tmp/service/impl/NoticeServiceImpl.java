@@ -5,7 +5,9 @@ import com.xupt.tmp.common.Consts;
 import com.xupt.tmp.dto.noticeDto.CreateNotice;
 import com.xupt.tmp.dto.noticeDto.NoticeUpdate;
 import com.xupt.tmp.mapper.NoticeMapper;
+import com.xupt.tmp.mapper.UCCMapper;
 import com.xupt.tmp.model.Notice;
+import com.xupt.tmp.model.UCCRelation;
 import com.xupt.tmp.model.User;
 import com.xupt.tmp.service.NoticeService;
 import org.springframework.beans.BeanUtils;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -20,6 +23,9 @@ import java.util.List;
 public class NoticeServiceImpl implements NoticeService {
     @Autowired
     private NoticeMapper noticeMapper;
+
+    @Autowired
+    private UCCMapper uccMapper;
 
     @Override
     public void addNotice(CreateNotice createNotice, HttpServletRequest request) {
@@ -56,6 +62,21 @@ public class NoticeServiceImpl implements NoticeService {
     public List<Notice> getNoticeByCourseIds(List<Long> courseIds) {
         List<Notice> notices = noticeMapper.getNoticeByCourseIds(courseIds);
         return notices;
+    }
+
+    @Override
+    public List<Notice> getNotices(User user) {
+        List<Notice> result = new ArrayList<>();
+        List<UCCRelation> uccRelations = uccMapper.selectRelation(user.getUsername());
+        if (uccRelations != null) {
+            for (UCCRelation uccRelation : uccRelations) {
+                List<Notice> list = noticeMapper.selectNoticesByCourseIdAndClazzId(uccRelation.getCourseId(), uccRelation.getClazzId());
+                if (list != null) {
+                    result.addAll(list);
+                }
+            }
+        }
+        return result;
     }
 
 }

@@ -21,13 +21,18 @@ public class Notice {
      * 课程Id
      */
     private long courseId;
-
+    /**
+     * 课程名称
+     */
     private String courseName;
     /**
      * 班级Id
      */
     private long clazzId;
 
+    /**
+     * 班级名称
+     */
     private String clazzName;
     /**
      * 文本内容

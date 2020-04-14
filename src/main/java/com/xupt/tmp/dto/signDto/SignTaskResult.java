@@ -44,6 +44,11 @@ public class SignTaskResult {
      */
     private long endTime;
 
+    /**
+     * 是否签到
+     */
+    private int status;
+
     public SignTaskResult(SignTask signTask) {
         this.id = signTask.getId();
         this.courseId = signTask.getCourseId();
@@ -54,5 +59,6 @@ public class SignTaskResult {
         this.name = signTask.getName();
         this.courseName = signTask.getCourseName();
         this.clazzName = signTask.getClazzName();
+        this.status = signTask.getStatus();
     }
 }

@@ -1,5 +1,6 @@
 package com.xupt.tmp.service;
 
+import com.xupt.tmp.dto.gradeDto.GradeMyResult;
 import com.xupt.tmp.dto.gradeDto.GradeQuery;
 import com.xupt.tmp.dto.gradeDto.GradeResult;
 import com.xupt.tmp.dto.gradeDto.GradeSum;
@@ -32,6 +33,13 @@ class GradeServiceTest {
         query.setValue(r);
         List<GradeSum> gradeSum = gradeService.getGradeSum(query);
         System.out.println(gradeSum);
+
+    }
+
+    @Test
+    void getGradeSums() {
+        List<GradeMyResult> myGrade = gradeService.getMyGrade("02161017", 1);
+        System.out.println(myGrade);
 
     }
 }

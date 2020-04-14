@@ -1,5 +1,6 @@
 package com.xupt.tmp.service;
 
+import com.xupt.tmp.dto.ResultMap;
 import com.xupt.tmp.dto.signDto.SignCreate;
 import com.xupt.tmp.dto.signDto.SignTaskResult;
 import com.xupt.tmp.model.SignRecord;
@@ -12,7 +13,9 @@ public interface SignService {
 
     List<SignRecord> getSignRecord(Long id);
 
-    void sign(String username);
+    ResultMap sign(long signId, String username);
 
     List<SignTaskResult> getSignTasks(String username);
+
+    List<SignTaskResult> getSignRecords(String username);
 }

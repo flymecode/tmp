@@ -14,7 +14,8 @@
             `course_name`,
             `name`,
             `questions`,
-            `status`
+            `status`,
+            `paper_score`,
         </trim>
         VALUES
         <trim prefix=" (" suffix=")" suffixOverrides=",">
@@ -24,7 +25,8 @@
             #{courseName, jdbcType=VARCHAR},
             #{name, jdbcType=VARCHAR},
             #{questions, jdbcType=VARCHAR},
-            #{status, jdbcType=INTEGER}
+            #{status, jdbcType=INTEGER},
+            #{paperScore, jdbcType=INTEGER},
         </trim>
     </insert>
 

@@ -12,7 +12,7 @@ public class SignRecord {
      */
     private long signId;
     /**
-     * 签到状态
+     * 签到状态 1-签到 0-未签到
      */
     private int status;
     /**
