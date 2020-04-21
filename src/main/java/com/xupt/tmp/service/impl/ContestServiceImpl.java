@@ -2,19 +2,15 @@ package com.xupt.tmp.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.xupt.tmp.common.Consts;
-import com.xupt.tmp.dto.contestDto.ContestAnswer;
-import com.xupt.tmp.dto.contestDto.ContestCreate;
-import com.xupt.tmp.dto.contestDto.ContestQuery;
-import com.xupt.tmp.dto.contestDto.ContestResult;
-import com.xupt.tmp.mapper.ContestMapper;
-import com.xupt.tmp.mapper.GradeMapper;
-import com.xupt.tmp.mapper.QuestionMapper;
-import com.xupt.tmp.mapper.QuestionPaperMapper;
+import com.xupt.tmp.dto.contestDto.*;
+import com.xupt.tmp.mapper.*;
 import com.xupt.tmp.model.*;
 import com.xupt.tmp.service.ContestService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +33,9 @@ public class ContestServiceImpl implements ContestService {
 
     @Autowired
     private QuestionPaperMapper questionPaperMapper;
+
+    @Autowired
+    private ClazzMapper clazzMapper;
 
     @Override
     public void createContest(ContestCreate contestCreate, HttpServletRequest request) throws ParseException {
@@ -102,7 +101,8 @@ public class ContestServiceImpl implements ContestService {
             }
         }
         Grade grade = new Grade();
-        grade.setAnswerJson(answer.toString());
+        String answerJson = JSONObject.toJSONString(answer);
+        grade.setAnswerJson(answerJson);
         grade.setAutoResult(count);
         grade.setState(0);
         grade.setStudentId(username);
@@ -121,16 +121,21 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
-    public List<ContestResult> getContestByCreateId(HttpServletRequest request, ContestQuery query) {
+    public PageInfo<ContestResult> getContestByCreateId(HttpServletRequest request, ContestQuery query) {
         User user = (User) request.getAttribute(Consts.CURRENT_USER);
+        query.setUsername(user.getUsername());
         PageHelper.startPage(query.getPage(), query.getLimit());
-        List<Contest> contestByCreateId = contestMapper.getContestByCreateId(user.getUsername(), query.getType());
+        List<Contest> contests = contestMapper.getContestByCreateId(query);
+        PageInfo<Contest> contestPageInfo = new PageInfo<>(contests);
         List<ContestResult> contestResults = new ArrayList<>();
-        for (Contest contest : contestByCreateId) {
+        for (Contest contest : contests) {
             ContestResult contestResult = new ContestResult(contest);
             contestResults.add(contestResult);
         }
-        return contestResults;
+        PageInfo<ContestResult> pageInfo = new PageInfo<>();
+        BeanUtils.copyProperties(contestPageInfo, pageInfo);
+        pageInfo.setList(contestResults);
+        return pageInfo;
     }
 
     @Override
@@ -138,8 +143,43 @@ public class ContestServiceImpl implements ContestService {
         return gradeMapper.selectGradeRecodesByIds(id);
     }
 
+    @Override
+    public ContestMetrics getMetrics(long contestId) {
+        ContestMetrics result = new ContestMetrics();
+        Contest contest = contestMapper.selectContest(contestId);
+        if (contest != null) {
+            long clazzId = contest.getClazzId();
+            // 学生人数
+            int num = clazzMapper.selectNum(clazzId);
+            int temp = 0;
+            int pass = 0;
+            int noPass = 0;
+            int countScore = 0;
+            List<Grade> grades = gradeMapper.selectGradeRecodesByIds(contestId);
+            if (grades != null) {
+                temp = grades.size();
+                for (Grade grade : grades) {
+                    int score = grade.getResult();
+                    if (score >= 60) {
+                        pass++;
+                    } else {
+                        noPass++;
+                    }
+                    countScore += score;
+                }
+                result.setAverageScore(countScore / num);
+            }
+            Map<String, Integer> metrics = new HashMap<>();
+            metrics.put("未及格", noPass);
+            metrics.put("及格", pass);
+            metrics.put("未作答", num - temp);
+            result.setMetrics(metrics);
+        }
+        return result;
+    }
 
-    private Contest contestBuild(ContestCreate contestCreate) throws ParseException {
+
+    private Contest contestBuild(ContestCreate contestCreate) {
         Contest contest = new Contest();
         Long[] value = contestCreate.getValue();
         contest.setCourseId(value[0]);

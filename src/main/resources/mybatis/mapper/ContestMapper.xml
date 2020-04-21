@@ -53,4 +53,18 @@
         </where>
     </select>
 
+    <select id="getContestByCreateId" resultType="com.xupt.tmp.model.Contest" parameterType="com.xupt.tmp.dto.contestDto.ContestQuery">
+        SELECT contest.*,course.name AS courseName,clazz.name AS clazzName
+        FROM contest,course,clazz
+        WHERE
+        contest.operation_id = #{username}
+        AND type = #{type}
+        AND course.id = contest.course_id
+        AND clazz.id = contest.clazz_id
+        <if test="clazzId != 0 and courseId != 0">
+            AND contest.clazz_id = #{clazzId}
+            AND contest.course_id = #{courseId}
+        </if>
+    </select>
+
 </mapper>

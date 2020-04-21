@@ -45,10 +45,10 @@
         SELECT * FROM question
         <where>
             <if test='type != null'>
-                `question_type` = #{type},
+                `question_type` = #{type}
             </if>
             <if test='difficulty != null'>
-                AND `difficulty` = #{difficulty},
+                AND `difficulty` = #{difficulty}
             </if>
             <if test='courseId != null'>
                 AND course_id = #{courseId}

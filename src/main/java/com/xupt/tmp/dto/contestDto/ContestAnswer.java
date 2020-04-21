@@ -28,10 +28,5 @@ public class ContestAnswer {
     class Node {
         Long id;
         String r;
-
-        @Override
-        public String toString() {
-            return "{id:" + id + ",r:" + r + "}";
-        }
     }
 }

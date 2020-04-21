@@ -9,13 +9,15 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `name`,
             `course_id`,
-            `students`
+            `students`,
+            `num`
         </trim>
         VALUES
         <trim prefix=" (" suffix=")" suffixOverrides=",">
             #{name, jdbcType=VARCHAR},
             #{courseId, jdbcType=BIGINT},
-            #{students, jdbcType=VARCHAR}
+            #{students, jdbcType=VARCHAR},
+            #{num, jdbcType=INTEGER}
         </trim>
     </insert>
 

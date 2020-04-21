@@ -236,9 +236,11 @@ public class GradeServiceImpl implements GradeService {
             int homeworkScore = 0;
             for (Contest contest : homework) {
                 Grade grade = gradeMapper.selectGradeRecode(contest.getId(), username);
-                homeworkScore += grade.getResult();
-                ContestAndGradeRelation gradeRelation = new ContestAndGradeRelation(contest, grade);
-                homeworkRelations.add(gradeRelation);
+                if (grade != null) {
+                    homeworkScore += grade.getResult();
+                    ContestAndGradeRelation gradeRelation = new ContestAndGradeRelation(contest, grade);
+                    homeworkRelations.add(gradeRelation);
+                }
             }
             // 设置作业成绩
             if (result.getContestGradeSum() != 0) {

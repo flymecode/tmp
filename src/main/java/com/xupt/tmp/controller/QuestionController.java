@@ -1,6 +1,7 @@
 package com.xupt.tmp.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageInfo;
 import com.xupt.tmp.common.Consts;
 import com.xupt.tmp.dto.ResultMap;
 import com.xupt.tmp.dto.questionDto.QuestionContest;
@@ -29,7 +30,7 @@ public class QuestionController extends BaseController {
 
     @GetMapping("/list")
     public ResponseEntity getQuestionsByConditions(QuestionQueryParam questionQueryParam, HttpServletRequest request) {
-        List<Question> questions = questionService.getQuestionsByConditions(questionQueryParam);
+        PageInfo<Question> questions = questionService.getQuestionsByConditions(questionQueryParam);
         return ResponseEntity.ok(new ResultMap(tokenUtils).successAndRefreshToken(request).payload(questions));
     }
 

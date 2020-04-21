@@ -1,6 +1,7 @@
 package com.xupt.tmp.model;
 
 import lombok.Data;
+
 @Data
 public class Clazz {
     /**
@@ -19,4 +20,8 @@ public class Clazz {
      * 学生信息
      */
     private String students;
+    /**
+     * 班级人数
+     */
+    private int num;
 }

@@ -13,7 +13,7 @@ public interface GradeMapper {
     @Select("select * from grade where contest_id=#{id} and student_id=#{username}")
     Grade selectGradeRecode(@Param("id") Long id, @Param("username") String username);
 
-    @Select("select grade.* from grade where contest_id=#{id}")
+    @Select("select * from grade where contest_id=#{id}")
     List<Grade> selectGradeRecodesByIds(Long id);
 
     @Select("select * from grade where id=#{id}")

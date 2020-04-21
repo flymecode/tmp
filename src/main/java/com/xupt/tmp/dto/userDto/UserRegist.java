@@ -18,6 +18,8 @@ public class UserRegist {
     @NotBlank(message = "password cannot be EMPTY")
     @Pattern(regexp = Consts.REG_USER_PASSWORD, message = "密码长度为6-20位")
     private String password;
-
-    private String type;
+    // 1-学生 2-老师
+    private int type;
+    
+    private String name;
 }

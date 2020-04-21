@@ -1,17 +1,22 @@
 package com.xupt.tmp.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.xupt.tmp.common.Consts;
-import com.xupt.tmp.dto.replyDto.CreateReply;
+import com.xupt.tmp.dto.replyDto.ReplyAgree;
+import com.xupt.tmp.dto.replyDto.ReplyCreate;
+import com.xupt.tmp.dto.replyDto.ReplyNoAgree;
 import com.xupt.tmp.dto.replyDto.ReplyQuery;
 import com.xupt.tmp.mapper.CourseMapper;
 import com.xupt.tmp.mapper.ReplyMapper;
+import com.xupt.tmp.mapper.SignMapper;
 import com.xupt.tmp.model.Course;
 import com.xupt.tmp.model.Reply;
 import com.xupt.tmp.model.User;
 import com.xupt.tmp.service.ReplyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
@@ -26,14 +31,19 @@ public class ReplyServiceImpl implements ReplyService {
     @Autowired
     private CourseMapper courseMapper;
 
+    @Autowired
+    private SignMapper signMapper;
+
     @Override
-    public List<Reply> getReplys(String username, ReplyQuery query) {
+    public PageInfo<Reply> getReplys(String username, ReplyQuery query) {
         PageHelper.startPage(query.getPage(), query.getLimit());
-        return replyMapper.selectReply(username);
+        List<Reply> replies = replyMapper.selectReply(username);
+        PageInfo<Reply> pageInfo = new PageInfo<>(replies);
+        return pageInfo;
     }
 
     @Override
-    public void createReply(CreateReply createReply, HttpServletRequest request) {
+    public void createReply(ReplyCreate createReply, HttpServletRequest request) {
         Reply reply = new Reply();
         int type = createReply.getType();
         User user = (User) request.getAttribute(Consts.CURRENT_USER);
@@ -59,6 +69,22 @@ public class ReplyServiceImpl implements ReplyService {
 
     @Override
     public void updateReply(Reply reply) {
-        replyMapper.updateReply(reply);
+
     }
+
+    @Override
+    public void noAgreeReply(ReplyNoAgree replyAgree) {
+        replyMapper.updateReply(replyAgree);
+    }
+
+    @Override
+    @Transactional
+    public void agreeReply(ReplyAgree replyAgree) {
+        long id = replyAgree.getId();
+        long signId = replyAgree.getSignId();
+        String uesrname = replyAgree.getUsername();
+        signMapper.updateSignRecord(uesrname, signId, new Date());
+        replyMapper.updateReplyAgree(id);
+    }
+
 }

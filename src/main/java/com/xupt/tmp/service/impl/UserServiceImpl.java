@@ -1,5 +1,6 @@
 package com.xupt.tmp.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.xupt.tmp.model.User;
 import com.xupt.tmp.exception.ServerException;
 import com.xupt.tmp.mapper.UserMapper;
@@ -13,6 +14,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @Slf4j
 public class UserServiceImpl implements UserService {
@@ -21,7 +24,7 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     @Override
-    public User userLogin(UserLogin userLogin) throws ServerException{
+    public User userLogin(UserLogin userLogin) throws ServerException {
         String username = userLogin.getUsername();
         String password = userLogin.getPassword();
         User user = getByUsername(username);
@@ -45,25 +48,27 @@ public class UserServiceImpl implements UserService {
     @Override
     public User register(UserRegist userRegist) {
         String username = userRegist.getUsername();
-//        //用户名是否已经注册
-//        if (isExist(username)) {
-//            log.info("the username {} has been registered", username);
-//            throw new ServerException("the username:" + username + " has been registered");
-//        }
-//        String email = userRegist.getEmail();
-//        //邮箱是否已经注册
-//        if (isExist(email)) {
-//            log.info("the email {} has been registered", email);
-//            throw new ServerException("the email:" + email + " has been registered");
-//        }
+        //用户名是否已经注册
+        if (isExist(username)) {
+            log.info("the username {} has been registered", username);
+            throw new ServerException("the username:" + username + " has been registered");
+        }
         User user = new User();
         //密码加密
         userRegist.setPassword(BCrypt.hashpw(userRegist.getPassword(), BCrypt.gensalt()));
         BeanUtils.copyProperties(userRegist, user);
+        user.setAvatar("https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
+        ArrayList<String> roles = new ArrayList<>();
+        if (userRegist.getType() == 1) {
+            roles.add("student");
+        } else {
+            roles.add("teacher");
+        }
+        user.setRoles(JSONObject.toJSONString(roles));
         //添加用户
         if (userMapper.insert(user) <= 0) {
-            log.info("regist fail: {}", userRegist.toString());
-            throw new ServerException("regist fail: unspecified error");
+            log.info("register fail: {}", userRegist.toString());
+            throw new ServerException("register fail: unspecified error");
         }
         //添加成功，发送激活邮件
         //sendMail(user.getEmail(), user);

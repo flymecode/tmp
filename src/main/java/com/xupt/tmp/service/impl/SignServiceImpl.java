@@ -1,9 +1,12 @@
 package com.xupt.tmp.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.xupt.tmp.common.Consts;
 import com.xupt.tmp.dto.ResultMap;
 import com.xupt.tmp.dto.signDto.SignCreate;
+import com.xupt.tmp.dto.signDto.SignQuery;
 import com.xupt.tmp.dto.signDto.SignTaskResult;
 import com.xupt.tmp.dto.userDto.UserUpload;
 import com.xupt.tmp.mapper.ClazzMapper;
@@ -15,6 +18,7 @@ import com.xupt.tmp.model.UCCRelation;
 import com.xupt.tmp.model.User;
 import com.xupt.tmp.service.SignService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +40,7 @@ public class SignServiceImpl implements SignService {
 
     @Autowired
     private UCCMapper uccMapper;
+
 
     @Override
     @Transactional
@@ -87,9 +92,16 @@ public class SignServiceImpl implements SignService {
     }
 
     @Override
-    public List<SignTaskResult> getSignTasks(String username) {
-        List<SignTask> signTasks = signMapper.selectSignTasks(username);
-        return signTasks.stream().map(SignTaskResult::new).collect(Collectors.toList());
+    public PageInfo<SignTaskResult> getSignTasks(String username, SignQuery signQuery) {
+        signQuery.setUsername(username);
+        PageHelper.startPage(signQuery.getPage(), signQuery.getLimit());
+        List<SignTask> signTasks = signMapper.selectSignTasks(signQuery);
+        PageInfo<SignTask> signTaskPageInfo = new PageInfo<>(signTasks);
+        List<SignTaskResult> collect = signTaskPageInfo.getList().stream().map(SignTaskResult::new).collect(Collectors.toList());
+        PageInfo<SignTaskResult> result = new PageInfo<>();
+        BeanUtils.copyProperties(signTaskPageInfo, result);
+        result.setList(collect);
+        return result;
     }
 
     @Override

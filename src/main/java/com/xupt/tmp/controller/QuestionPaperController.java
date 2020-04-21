@@ -1,5 +1,6 @@
 package com.xupt.tmp.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.xupt.tmp.annotion.CurrentUser;
 import com.xupt.tmp.common.Consts;
 import com.xupt.tmp.dto.ResultMap;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @Slf4j
@@ -28,9 +28,8 @@ public class QuestionPaperController extends BaseController {
 
     @GetMapping
     public ResponseEntity getPaper(@CurrentUser User user, int page, int limit) {
-        List<QuestionPaper> list = questionPaperService.getPaperInfo(user.getUsername(), page, limit);
-        List<PaperResult> collect = list.stream().map(PaperResult::new).collect(Collectors.toList());
-        return ResponseEntity.ok(new ResultMap().success().payloads(collect));
+        PageInfo<PaperResult> paperInfo = questionPaperService.getPaperInfo(user.getUsername(), page, limit);
+        return ResponseEntity.ok(new ResultMap().success().payload(paperInfo));
     }
 
     @GetMapping("/list")

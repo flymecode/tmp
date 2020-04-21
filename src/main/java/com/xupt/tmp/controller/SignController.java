@@ -1,10 +1,12 @@
 package com.xupt.tmp.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.xupt.tmp.annotion.CurrentUser;
 import com.xupt.tmp.common.Consts;
 import com.xupt.tmp.dto.ResultMap;
 import com.xupt.tmp.dto.signDto.SignCommit;
 import com.xupt.tmp.dto.signDto.SignCreate;
+import com.xupt.tmp.dto.signDto.SignQuery;
 import com.xupt.tmp.dto.signDto.SignTaskResult;
 import com.xupt.tmp.model.SignRecord;
 import com.xupt.tmp.model.User;
@@ -38,9 +40,9 @@ public class SignController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity getSignTask(@CurrentUser User user) {
-        List<SignTaskResult> signTasks = signService.getSignTasks(user.getUsername());
-        return ResponseEntity.ok(new ResultMap().success().payloads(signTasks));
+    public ResponseEntity getSignTask(@CurrentUser User user, SignQuery signQuery) {
+        PageInfo<SignTaskResult> signTasks = signService.getSignTasks(user.getUsername(), signQuery);
+        return ResponseEntity.ok(new ResultMap().success().payload(signTasks));
     }
 
     @GetMapping("/record")

@@ -1,17 +1,23 @@
 package com.xupt.tmp.service;
 
-import com.xupt.tmp.dto.replyDto.CreateReply;
+import com.github.pagehelper.PageInfo;
+import com.xupt.tmp.dto.replyDto.ReplyAgree;
+import com.xupt.tmp.dto.replyDto.ReplyCreate;
+import com.xupt.tmp.dto.replyDto.ReplyNoAgree;
 import com.xupt.tmp.dto.replyDto.ReplyQuery;
 import com.xupt.tmp.model.Reply;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 public interface ReplyService {
 
-    List<Reply> getReplys(String username, ReplyQuery query);
+    PageInfo<Reply> getReplys(String username, ReplyQuery query);
 
-    void createReply(CreateReply reply, HttpServletRequest request);
+    void createReply(ReplyCreate reply, HttpServletRequest request);
+
+    void agreeReply(ReplyAgree replyAgree);
 
     void updateReply(Reply reply);
+
+    void noAgreeReply(ReplyNoAgree replyAgree);
 }

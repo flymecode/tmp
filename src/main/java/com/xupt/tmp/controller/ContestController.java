@@ -1,13 +1,11 @@
 package com.xupt.tmp.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageInfo;
 import com.xupt.tmp.annotion.CurrentUser;
 import com.xupt.tmp.common.Consts;
 import com.xupt.tmp.dto.ResultMap;
-import com.xupt.tmp.dto.contestDto.ContestAnswer;
-import com.xupt.tmp.dto.contestDto.ContestCreate;
-import com.xupt.tmp.dto.contestDto.ContestQuery;
-import com.xupt.tmp.dto.contestDto.ContestResult;
+import com.xupt.tmp.dto.contestDto.*;
 import com.xupt.tmp.model.Contest;
 import com.xupt.tmp.model.Grade;
 import com.xupt.tmp.model.User;
@@ -102,9 +100,16 @@ public class ContestController {
      * @param request
      * @return
      */
-    @PostMapping("/list")
-    public ResponseEntity getContestByCreateId(@RequestBody ContestQuery query, HttpServletRequest request) {
-        List<ContestResult> list = contestService.getContestByCreateId(request, query);
+    @GetMapping("/list")
+    public ResponseEntity getContestByCreateId(ContestQuery query, HttpServletRequest request) {
+        PageInfo<ContestResult> list = contestService.getContestByCreateId(request, query);
         return ResponseEntity.ok(new ResultMap().success().payload(list));
+    }
+
+
+    @GetMapping("/metrics")
+    public ResponseEntity getMetrics(@RequestParam("contestId") long contestId) {
+        ContestMetrics metrics = contestService.getMetrics(contestId);
+        return ResponseEntity.ok(new ResultMap().success().payload(metrics));
     }
 }

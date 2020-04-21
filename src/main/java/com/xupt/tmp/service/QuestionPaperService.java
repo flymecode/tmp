@@ -1,5 +1,7 @@
 package com.xupt.tmp.service;
 
+import com.github.pagehelper.PageInfo;
+import com.xupt.tmp.dto.paperDto.PaperResult;
 import com.xupt.tmp.dto.paperDto.QuestionPaperResult;
 import com.xupt.tmp.model.QuestionPaper;
 
@@ -11,6 +13,7 @@ public interface QuestionPaperService {
 
     /**
      * 获取试卷和问题信息
+     *
      * @param username
      * @return
      */
@@ -18,6 +21,7 @@ public interface QuestionPaperService {
 
     /**
      * 添加试卷
+     *
      * @param questionPaper
      * @return
      */
@@ -25,17 +29,19 @@ public interface QuestionPaperService {
 
     /**
      * 获取试卷信息
+     *
      * @param username
      * @param page
      * @param limit
      * @return
      */
-    List<QuestionPaper> getPaperInfo(String username, int page, int limit);
+    PageInfo<PaperResult> getPaperInfo(String username, int page, int limit);
 
     void deletePaper();
 
     /**
      * 获取试卷名称
+     *
      * @param name
      * @param request
      * @return

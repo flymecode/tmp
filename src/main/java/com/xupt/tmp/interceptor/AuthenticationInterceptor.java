@@ -1,12 +1,10 @@
 package com.xupt.tmp.interceptor;
 
-import com.alibaba.fastjson.JSONObject;
 import com.xupt.tmp.annotion.AuthIgnore;
 import com.xupt.tmp.annotion.AuthShare;
 import com.xupt.tmp.common.Consts;
-import com.xupt.tmp.model.User;
 import com.xupt.tmp.enums.HttpCodeEnum;
-import com.xupt.tmp.dto.ResultMap;
+import com.xupt.tmp.model.User;
 import com.xupt.tmp.service.UserService;
 import com.xupt.tmp.utils.TokenUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -86,17 +84,17 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             return false;
         }
 
-        if (!request.getServletPath().contains("/user/active") && !user.getActive()) {
-            if (request.getServletPath().contains("/user/sendmail")) {
-                request.setAttribute(Consts.CURRENT_USER, user);
-                return true;
-            }
-            log.info("current user is not activated, username: {}", user.getUsername());
-            response.setStatus(HttpCodeEnum.FAIL.getCode());
-            ResultMap resultMap = new ResultMap(tokenUtils);
-            response.getWriter().print(JSONObject.toJSONString(resultMap.failAndRefreshToken(request).message("Account not active yet. Please check your email to activate your account")));
-            return false;
-        }
+//        if (!request.getServletPath().contains("/user/active") && !user.getActive()) {
+//            if (request.getServletPath().contains("/user/sendmail")) {
+//                request.setAttribute(Consts.CURRENT_USER, user);
+//                return true;
+//            }
+//            log.info("current user is not activated, username: {}", user.getUsername());
+//            response.setStatus(HttpCodeEnum.FAIL.getCode());
+//            ResultMap resultMap = new ResultMap(tokenUtils);
+//            response.getWriter().print(JSONObject.toJSONString(resultMap.failAndRefreshToken(request).message("Account not active yet. Please check your email to activate your account")));
+//            return false;
+//        }
         request.setAttribute(Consts.CURRENT_USER, user);
         return true;
     }

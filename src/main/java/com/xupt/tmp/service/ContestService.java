@@ -1,9 +1,7 @@
 package com.xupt.tmp.service;
 
-import com.xupt.tmp.dto.contestDto.ContestAnswer;
-import com.xupt.tmp.dto.contestDto.ContestCreate;
-import com.xupt.tmp.dto.contestDto.ContestQuery;
-import com.xupt.tmp.dto.contestDto.ContestResult;
+import com.github.pagehelper.PageInfo;
+import com.xupt.tmp.dto.contestDto.*;
 import com.xupt.tmp.model.Contest;
 import com.xupt.tmp.model.Grade;
 
@@ -26,7 +24,9 @@ public interface ContestService {
 
     boolean getContestRecode(Long id, String username);
 
-    List<ContestResult> getContestByCreateId(HttpServletRequest request, ContestQuery query);
+    PageInfo<ContestResult> getContestByCreateId(HttpServletRequest request, ContestQuery query);
 
     List<Grade> getContestRecords(Long id);
+
+    ContestMetrics getMetrics(long contestId);
 }

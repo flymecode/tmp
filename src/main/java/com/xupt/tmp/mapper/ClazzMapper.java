@@ -16,4 +16,7 @@ public interface ClazzMapper {
     String selectStudents(@Param("clazzId") long clazzId);
 
     List<Clazz> selectClazzsByCourseIds(List<Long> courseIds);
+
+    @Select({"select `num` from clazz where id = #{clazzId}"})
+    int selectNum(@Param("clazzId") long clazzId);
 }

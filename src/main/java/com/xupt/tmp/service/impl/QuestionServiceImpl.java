@@ -1,6 +1,7 @@
 package com.xupt.tmp.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.xupt.tmp.config.PageUtils;
 import com.xupt.tmp.dto.ResultMap;
 import com.xupt.tmp.dto.questionDto.QuestionQueryParam;
@@ -28,7 +29,7 @@ public class QuestionServiceImpl implements QuestionService {
     private QuestionMapper questionMapper;
 
     @Override
-    public List<Question> getQuestionsByConditions(QuestionQueryParam questionQueryParam) {
+    public PageInfo<Question> getQuestionsByConditions(QuestionQueryParam questionQueryParam) {
         int pageNum = questionQueryParam.getPage();
         int pageSize = questionQueryParam.getLimit();
         String sort = questionQueryParam.getSort();
@@ -44,7 +45,8 @@ public class QuestionServiceImpl implements QuestionService {
                 questions.sort((o1, o2) -> (int) (o2.getId() - o1.getId()));
             }
         }
-        return questions;
+        PageInfo<Question> questionPageInfo = new PageInfo<>(questions);
+        return questionPageInfo;
     }
 
     @Override

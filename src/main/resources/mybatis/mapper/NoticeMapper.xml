@@ -43,4 +43,17 @@
         </where>
     </select>
 
+    <select id="selectNotices" resultType="com.xupt.tmp.model.Notice"
+            parameterType="com.xupt.tmp.dto.noticeDto.NoticeQuery">
+        select notice.*, course.name as courseName, clazz.name as clazzName
+        from notice,course,clazz
+        where notice.create_id = #{username}
+        and notice.course_id = course.id
+        and notice.clazz_id = clazz.id
+        <if test="clazzId != 0 and courseId != 0">
+            and notice.course_id = #{courseId}
+            and notice.clazz_id = #{clazzId}
+        </if>
+    </select>
+
 </mapper>

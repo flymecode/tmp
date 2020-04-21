@@ -16,13 +16,13 @@ public interface GradeExtMapper {
     int insert(GradeExt gradeExt);
 
     @Update({"update grade_ext set title=#{title},grade=#{grade},type=#{type} where id=#{id}"})
-    int updateGradeExt(GradeExt gradeExt);
+    int updateGradeExt( GradeExt gradeExt);
 
     @Select({"select * from grade_ext where username = #{username} and clazz_id=#{clazzId} and course_id=#{courseId}"})
     List<GradeExt> selectGradeExtsInfo(GradeExtQuery query);
 
     @DeleteMapping({"delete from grade_ext where id = #{id}"})
-    int deleteGradeExtById(long id);
+    int deleteGradeExtById(@Param("id") long id);
 
     @Select({"SELECT IFNULL(sum(grade),0) from grade_ext where username = #{username} and course_id = #{courseId} and clazz_id = #{clazzId}"})
     int selectGradeSum(@Param("username") String username, @Param("courseId") long courseId, @Param("clazzId") long clazzId);

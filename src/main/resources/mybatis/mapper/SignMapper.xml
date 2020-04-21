@@ -47,4 +47,17 @@
             #{endTime},
         </trim>
     </insert>
+
+    <select id="selectSignTasks" resultType="com.xupt.tmp.model.SignTask"
+            parameterType="com.xupt.tmp.dto.signDto.SignQuery">
+        SELECT sign_task.*,course.name as courseName,clazz.name as clazzName
+        from sign_task,course,clazz
+        where sign_task.create_id = #{username}
+        and course.id=sign_task.course_id
+        and clazz.id=sign_task.clazz_id
+        <if test="clazzId != 0 and courseId != 0">
+            AND sign_task.clazz_id = #{clazzId}
+            AND sign_task.course_id = #{courseId}
+        </if>
+    </select>
 </mapper>

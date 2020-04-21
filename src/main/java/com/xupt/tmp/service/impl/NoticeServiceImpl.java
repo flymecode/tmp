@@ -1,8 +1,10 @@
 package com.xupt.tmp.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.xupt.tmp.common.Consts;
-import com.xupt.tmp.dto.noticeDto.CreateNotice;
+import com.xupt.tmp.dto.noticeDto.NoticeCreate;
+import com.xupt.tmp.dto.noticeDto.NoticeQuery;
 import com.xupt.tmp.dto.noticeDto.NoticeUpdate;
 import com.xupt.tmp.mapper.NoticeMapper;
 import com.xupt.tmp.mapper.UCCMapper;
@@ -28,7 +30,7 @@ public class NoticeServiceImpl implements NoticeService {
     private UCCMapper uccMapper;
 
     @Override
-    public void addNotice(CreateNotice createNotice, HttpServletRequest request) {
+    public void addNotice(NoticeCreate createNotice, HttpServletRequest request) {
         Notice notice = new Notice();
         User user = (User) request.getAttribute(Consts.CURRENT_USER);
         Long[] value = createNotice.getValue();
@@ -44,12 +46,6 @@ public class NoticeServiceImpl implements NoticeService {
         noticeMapper.inster(notice);
     }
 
-    @Override
-    public List<Notice> getNotices(int page, int limit, HttpServletRequest request) {
-        PageHelper.startPage(page, limit);
-        User user = (User) request.getAttribute(Consts.CURRENT_USER);
-        return noticeMapper.selectNotices(user.getUsername());
-    }
 
     @Override
     public void updateNotice(NoticeUpdate noticeUpdate) {
@@ -77,6 +73,21 @@ public class NoticeServiceImpl implements NoticeService {
             }
         }
         return result;
+    }
+
+    @Override
+    public PageInfo<Notice> getNotices(NoticeQuery query, HttpServletRequest request) {
+        PageHelper.startPage(query.getPage(), query.getLimit());
+        User user = (User) request.getAttribute(Consts.CURRENT_USER);
+        query.setUsername(user.getUsername());
+        List<Notice> notices = noticeMapper.selectNotices(query);
+        PageInfo<Notice> pageInfo = new PageInfo<>(notices);
+        return pageInfo;
+    }
+
+    @Override
+    public void deleteNotice(Long id) {
+        noticeMapper.delete(id);
     }
 
 }

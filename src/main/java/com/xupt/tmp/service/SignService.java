@@ -1,7 +1,9 @@
 package com.xupt.tmp.service;
 
+import com.github.pagehelper.PageInfo;
 import com.xupt.tmp.dto.ResultMap;
 import com.xupt.tmp.dto.signDto.SignCreate;
+import com.xupt.tmp.dto.signDto.SignQuery;
 import com.xupt.tmp.dto.signDto.SignTaskResult;
 import com.xupt.tmp.model.SignRecord;
 
@@ -15,7 +17,7 @@ public interface SignService {
 
     ResultMap sign(long signId, String username);
 
-    List<SignTaskResult> getSignTasks(String username);
+    PageInfo<SignTaskResult> getSignTasks(String username, SignQuery signQuery);
 
     List<SignTaskResult> getSignRecords(String username);
 }
